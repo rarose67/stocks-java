@@ -16,17 +16,8 @@ import java.util.HashMap;
 
 public class StockDataImporter {
 
-    private static HashMap<String, String> offeredStocks = new HashMap<>();
     private static HashMap<String, Stock> stockList = new HashMap<>();
     private static boolean isLoaded = false;
-
-    protected static HashMap<String, String> getOfferedStocks() {
-        return offeredStocks;
-    }
-
-    protected static HashMap<String, Stock> getStocksList() {
-        return stockList;
-    }
 
     /**
      * This function connects to a web address an returns the response.
@@ -109,7 +100,9 @@ public class StockDataImporter {
     }
 
     /**
-     *  This function loads the stock data from the IEX API.
+     * This function loads the stock data from the IEX API.
+     *
+     * @param stockData - the instance a the stockdata class
      */
     public static void loadSymbols(StockData stockData)
     {
@@ -130,18 +123,18 @@ public class StockDataImporter {
             obj = myResponse.getJSONObject(i);
             symbol = obj.getString("symbol");
             name = obj.getString("name");
-            offeredStocks.put(symbol, name);
+            stockData.getSymbolsAndNames().put(symbol, name);
             symbols.add(symbol);
 
             if ((i+1 >= myResponse.length()) || (((i+1) % 100) == 0))
             {
-                symbols = removeZeroDividends(symbols);
+                symbols = removeZeroDividends(symbols, stockData);
                 loadStockData(symbols);
                 symbols.clear();
             }
         }
 
-        for (String key : offeredStocks.keySet())
+        for (String key : stockData.getSymbolsAndNames().keySet())
         {
 
             stockData.findAll().add(stockList.get(key));
@@ -158,9 +151,10 @@ public class StockDataImporter {
      * Otherwise, the symbol is removed from the StockSymbols Hashmap.
      *
      * @param symbols - The list of symbols to be checked
+     * @param stockData - the instance a the stockdata class
      * @return validSymbols - An ArrayList of stock symbols with valid dividend.
      */
-    private static ArrayList<String> removeZeroDividends(ArrayList<String> symbols) {
+    private static ArrayList<String> removeZeroDividends(ArrayList<String> symbols, StockData stockData)  {
 
         Number dividendRate;
         String dividendRateExist, symbolString = "";
@@ -190,17 +184,14 @@ public class StockDataImporter {
         for (int i=0; i<symbols.size(); i++)
         {
             String symbol = symbols.get(i);
-            //if (myObject.optJSONObject(symbols.get(i)) != null)
             if (!(myObject.isNull(symbol)))
             {
-                //System.out.println("\n" + symbol+ " : " + myObject.optJSONObject(symbol).toString());
                 mySubObject = myObject.optJSONObject(symbols.get(i)).getJSONObject("stats");
 
                 dividendRateExist = mySubObject.optString("dividendRate", "No dividend");
                 if (dividendRateExist.equals("No dividend"))
                 {
-                    offeredStocks.remove(symbols.get(i));
-                    //symbols.remove(i);
+                    stockData.getSymbolsAndNames().remove(symbols.get(i));
                 }
                 else
                 {
@@ -209,13 +200,12 @@ public class StockDataImporter {
 
                     if (dividend <= 0.0)
                     {
-                        offeredStocks.remove(symbols.get(i));
-                        //symbols.remove(i);
+                        stockData.getSymbolsAndNames().remove(symbols.get(i));
                     }
                     else
                     {
 
-                        String name = offeredStocks.get(symbol);
+                        String name = stockData.getSymbolsAndNames().get(symbol);
                         Stock stock = new Stock(symbol, name, dividend);
                         stock.setLastDividendDate(loadExDate(mySubObject));
 
@@ -226,8 +216,7 @@ public class StockDataImporter {
             }
             else
             {
-                offeredStocks.remove(symbols.get(i));
-                //symbols.remove(i);
+                stockData.getSymbolsAndNames().remove(symbols.get(i));
             }
         }
 

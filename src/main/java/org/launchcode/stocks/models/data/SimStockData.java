@@ -5,38 +5,38 @@ import org.launchcode.stocks.models.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class StockData {
+public class SimStockData {
 
-    private ArrayList<Stock> stocks = new ArrayList<>();
-    private static HashMap<String, String> offeredStocks = new HashMap<>();
-    private static StockData instance;
-
-    public static double decimalPlaces(double num, int places)
-    {
-        double multiplier = Math.pow(10.0, places);
-        double dec =  Math.floor((num * multiplier) + 0.5) / multiplier;
-
-        return dec;
-    }
+    private ArrayList<SimStock> simStocks = new ArrayList<>();
+    private static HashMap<String, String> symbolsAndNames = new HashMap<>();
+    private static SimStockData instance;
 
     public HashMap<String, String> getSymbolsAndNames() {
-        return offeredStocks;
+        return symbolsAndNames;
     }
 
-    private StockData() {
-        StockDataImporter.loadSymbols(this);
+    private SimStockData() {
 
     }
 
-    public static StockData getInstance() {
+    public static SimStockData getInstance() {
         if (instance == null) {
-            instance = new StockData();
+            instance = new SimStockData();
         }
         return instance;
     }
 
-    public Stock findById(int id) {
-        for (Stock stock : stocks) {
+    public SimStock add(Stock stock)
+    {
+        SimStock simStock = new SimStock(stock);
+        simStocks.add(simStock);
+        symbolsAndNames.put(simStock.getSymbol(), simStock.getName());
+
+        return simStock;
+    }
+
+    public SimStock findById(int id) {
+        for (SimStock stock : simStocks) {
             if (stock.getId() == id)
                 return stock;
         }
@@ -44,8 +44,8 @@ public class StockData {
         return null;
     }
 
-    public Stock findBySymbol(String symbol) {
-        for (Stock stock : stocks) {
+    public SimStock findBySymbol(String symbol) {
+        for (SimStock stock : simStocks) {
             if (stock.getSymbol().equals(symbol))
                 return stock;
         }
@@ -53,8 +53,8 @@ public class StockData {
         return null;
     }
 
-    public Stock findByName(String name) {
-        for (Stock stock : stocks) {
+    public SimStock findByName(String name) {
+        for (SimStock stock : simStocks) {
             if (stock.getName().equals(name))
                 return stock;
         }
@@ -62,21 +62,21 @@ public class StockData {
         return null;
     }
 
-    public ArrayList<Stock> findAll() {
-        return stocks;
+    public ArrayList<SimStock> findAll() {
+        return simStocks;
     }
 
 
-    public ArrayList<Stock> findByColumnAndValue(ArrayList<StockField> stockFields)
+    public ArrayList<SimStock> findByColumnAndValue(ArrayList<StockField> stockFields)
     {
-        ArrayList<Stock> matchedStocks = new ArrayList<>(stocks);
-        ArrayList<Stock> matchingStocks = new ArrayList<>();
+        ArrayList<SimStock> matchedStocks = new ArrayList<>(simStocks);
+        ArrayList<SimStock> matchingStocks = new ArrayList<>();
         boolean done = false;
 
         for (StockField field : stockFields)
         {
             int i = 0;
-            for (Stock stock : matchedStocks)
+            for (SimStock stock : matchedStocks)
             {
                 i++;
                 if (findMatch(stock, field))
@@ -93,7 +93,7 @@ public class StockData {
         return matchedStocks;
     }
 
-    private boolean findMatch(Stock stock, StockField field)
+    private boolean findMatch(SimStock stock, StockField field)
     {
         boolean match = false;
 
@@ -146,7 +146,7 @@ public class StockData {
         {
             StockDateField dateField = (StockDateField) field;
 
-            if ((dateField.compareDate(stock.getLastDividendDate())))
+            if ((dateField.compareDate(stock.getNextDividendDate())))
             {
                 match = true;
             }
@@ -183,3 +183,5 @@ public class StockData {
         throw new IllegalArgumentException("Cannot get field of type " + type);
     }
 }
+
+
