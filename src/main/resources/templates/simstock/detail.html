@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org/">
+<head th:replace="fragments :: head"></head>
+<body>
+<!-- <nav th:replace="fragments :: navigation"></nav> -->
+
+    <h1 th:text="${title}"></h1>
+    <p th:unless="${simStock}">No simStock found</p>
+
+    <div th:if="${simStock}">
+        <h2 th:text="${simStock.getName() + ' (' + simStock.getSymbol() + ')'}"></h2>
+        <div>
+            <strong><span th:text="${simStock.getPrice()}"></span></strong>
+           <span th:if="${diff > 0}"
+                  th:text="'+' + ${diff}"
+                  style="color:green;"></span>
+            <span th:if="${diff < 0}"
+            th:text="${diff}"
+            style="color:red;"></span>
+            <span th:if="${diff == 0}"
+                  th:text="${diff}"></span>
+            <span th:replace="fragments :: price-cite"></span>
+        </div>
+        <hr>
+        <table>
+            <tr>
+                <td><Strong>Avg. Daily Variance:  </Strong></td>
+                <td th:text="${simStock.getVariance()}"></td>
+            </tr>
+            <tr>
+                <td><Strong>Yearly Dividend:  </Strong></td>
+                <td th:text="${simStock.getDividend()}"></td>
+            </tr>
+            <tr>
+                <td><Strong>Quarterly Dividend:  </Strong></td>
+                <td th:text="${simStock.getqDividend()}"></td>
+            </tr>
+            <tr>
+                <td><Strong>Annual Yield:  </Strong></td>
+                <td th:text="${simStock.getYield()}"></td>
+            </tr>
+            <tr>
+                <td><Strong>Next Dividend Date:  </Strong></td>
+                <td th:text="${simStock.getDate()}"></td>
+            </tr>
+        </table>
+    </div>
+
+</body>
+<footer th:replace="fragments :: footer"></footer>
+</html>

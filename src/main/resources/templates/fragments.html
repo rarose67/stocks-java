@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org/">
+<head th:fragment="head">
+    <meta charset="UTF-8"/>
+    <title th:text="${title}">My Stocks</title>
+
+    <!-- <link rel="stylesheet" th:href="@{/css/styles.css}" />
+    <script type="text/javascript" th:src="@{/js/script.js}"></script> -->
+</head>
+<body>
+    <select class="form-control">
+        <option th:fragment="compare" th:each="type : ${types}"
+                th:text="${type.getName()}"
+                th:value="${type}">
+        </option>
+    </select>
+
+    <div th:fragment="price-cite">
+        <cite>
+            <a href="https://iextrading.com/developer/">IEX Real-Time Price</a>
+        </cite>
+    </div>
+</body>
+<footer th:fragment="footer">
+    <cite>
+        <p>Data provided for free by <a href="https://iextrading.com/developer/">IEX</a>. View <a href="https://iextrading.com/api-exhibit-a/">IEX’s Terms of Use</a>.</p>
+    </cite>
+</footer>
+</html>

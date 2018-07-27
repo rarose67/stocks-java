@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org/">
+<head th:replace="fragments :: head"></head>
+<body>
+
+    <h1 th:text="${title}">List of Simulated Stocks!</h1>
+
+    <p th:unless="${simStocks} and ${simStocks.size()}">No simStocks</p>
+
+    <h2 th:text="${simStocks.size()} + ' simStocks'"></h2>
+    <ul>
+        <li th:each ="symbol : ${symbols}">
+                <a th:href="@{'/simstock/detail/' + ${symbol}}" th:text="${symbol}"></a>
+            <span th:text="${' : ' + simStocks.get(symbol)}"></span>
+        </li>
+    </ul>
+
+</body>
+<footer th:replace="fragments :: footer"></footer>
+</html>

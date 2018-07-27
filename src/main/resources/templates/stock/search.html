@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org/">
+<head th:replace="fragments :: head"></head>
+<body>
+<!-- <nav th:replace="fragments :: navigation"></nav> -->
+
+    <h1 th:text="${title}"></h1>
+
+<!-- <p th:if="${error} and ${error.length()}" th:text="${error}"></p> -->
+
+    <form method="post" action="/stock/search/results" th:object="${searchForm}">
+        <div class="form-group">
+            <label th:for="symbol">Symbol:</label>
+            <input th:field="*{symbol}" />
+        </div>
+        <div class="form-group">
+            <label th:for="name">Name:</label>
+            <input th:field="*{name}" />
+        </div>
+        <div class="form-group">
+            <label th:for="price">Price:</label>
+            <input th:field="*{price}" />
+            <select th:field="*{priceComp}">
+                <option th:replace="fragments :: compare"></option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label th:for="dividend">Dividend:</label>
+            <input th:field="*{dividend}" />
+            <select th:field="*{divComp}">
+                <option th:replace="fragments :: compare"></option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label th:for="yield">Yield:</label>
+            <input th:field="*{yield}" />
+            <select th:field="*{yieldComp}">
+                <option th:replace="fragments :: compare"></option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label th:for="date">Date:</label>
+                <input th:field="*{month}" /> /
+                <input th:field="*{day}" /> /
+                <input th:field="*{year}" />  |
+                <select th:field="*{dateComp}">
+                    <option th:replace="fragments :: compare"></option>
+                </select>
+            <div th:errors="*{month}"></div>
+        </div>
+        <input type="submit"/>
+    </form>
+</body>
+</html>
