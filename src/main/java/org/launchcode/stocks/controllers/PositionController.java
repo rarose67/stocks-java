@@ -110,6 +110,7 @@ public class PositionController {
                 simStockData.add(stock);
             }
         }
+
         Position position = positionDao.findOne(positionId);
         SimStock simStock = simStockData.findBySymbol(position.getSymbol());
 
