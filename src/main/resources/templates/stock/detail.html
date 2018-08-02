@@ -15,14 +15,14 @@
            <span th:if="${diff > 0}"
                   th:text="'+' + ${diff}"
                   style="color:green;"></span>
-            <span th:if="${diff < 0}"
-            th:text="${diff}"
-            style="color:red;"></span>
+            <span th:unless="${diff >= 0}"
+                  th:text="${diff}"
+                  style="color:red;"></span>
             <span th:if="${diff == 0}"
                   th:text="${diff}"></span>
             <span th:replace="fragments :: price-cite"></span>
         </div>
-        <hr>
+        <hr />
         <table>
             <tr>
                 <td><Strong>Avg. Daily Variance:  </Strong></td>
@@ -46,7 +46,7 @@
             </tr>
         </table>
     </div>
-    <hr>
+    <hr />
     <form method="post" action="/simstock/add">
         <input id="symbol" type="hidden" name="symbol" th:value="${stock.getSymbol()}" />
         <input type="submit" value="Create SimStock" />

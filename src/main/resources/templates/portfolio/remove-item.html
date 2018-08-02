@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org/">
+<head th:replace="fragments :: head"></head>
+<body class="container">
+
+<h1 th:text="${title}">Default Title</h1>
+
+<nav th:replace="fragments :: navigation"></nav>
+
+<form method="post">
+
+    <div th:each="position : ${positions}" class="checkbox">
+        <input type="checkbox" name="positionIds" th:value="${position.id}" th:id="${position.id}"/>
+        <label th:for="${position.id}" th:text="${position.symbol}"></label>
+        <br />
+    </div>
+
+    <input type="submit" value="Remove position" />
+</form>
+
+</body>
+</html>

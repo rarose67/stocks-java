@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org/">
+<head th:replace="fragments :: head"></head>
+<body class="container">
+
+<h1 th:text="${title}">Default Title</h1>
+
+<nav th:replace="fragments :: navigation"></nav>
+
+<form method="post">
+
+    <div th:each="portfolio : ${portfolios}" class="checkbox">
+        <input type="checkbox" name="portfolioIds" th:value="${portfolio.id}" th:id="${portfolio.id}"/>
+        <label th:for="${portfolio.id}" th:text="${portfolio.name}"></label>
+        <br />
+    </div>
+
+    <input type="submit" value="Remove portfolio" />
+</form>
+
+</body>
+</html>

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org/">
+<head th:replace="fragments :: head"></head>
+
+<body class="container">
+
+<h1 th:text="${title}">Default Title</h1>
+
+<nav th:replace="fragments :: navigation"></nav>
+
+<p th:unless="${portfolio} and ${portfolio.getPositions().size()}">no positions on the portfolio :(</p>
+
+<div>
+    <table class="table" th:if="${portfolio} and ${portfolio.getPositions().size()}">
+
+        <tr>
+            <th>Symbol</th>
+            <th>Name</th>
+            <th># of Shares</th>
+            <th>Investment % from dividend poll</th>
+            <th>Reinvest Dividends</th>
+        </tr>
+
+        <tr th:each="position : ${portfolio.getPositions()}">
+            <td><a th:href="@{'/position/view/' + ${position.id}}" th:text="${position.symbol}"></a></td>
+            <td th:text="${position.getStock().name}"></td>
+            <td th:text="${position.shares}"></td>
+            <td th:text="${position.percentage} + '%'"></td>
+            <td th:text="${position.reinvest}"></td>
+        </tr>
+    </table>
+
+    <p th:text="${'Cash: ' + portfolio.getCash() + '\t Balance: ' + portfolio.getBalance()}"></p>
+    <p th:text="${'# of Years Projected: ' + portfolio.getYears()}"></p>
+</div>
+
+    <p><a th:href="'/portfolio/add-item/' + ${portfolio.id}">Add Position</a></p>
+
+</body>
+</html>

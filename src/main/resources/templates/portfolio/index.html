@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org/">
+<head th:replace="fragments :: head"></head>
+
+<body class="container">
+
+<h1 th:text="${title}">Default Title</h1>
+
+<nav th:replace="fragments :: navigation"></nav>
+
+<p th:unless="${portfolios} and ${portfolios.size()}">No portfolios :(</p>
+
+<table class="table">
+
+    <tr>
+        <th>Name</th>
+        <th>Cash</th>
+        <th>Balance</th>
+        <th># of years Projected</th>
+    </tr>
+
+    <tr th:each="portfolio : ${portfolios}">
+        <td><a th:href="@{'/portfolio/view/' + ${portfolio.id}}" th:text="${portfolio.name}"></a></td>
+        <td th:text="${portfolio.name}"></td>
+        <td th:text="${portfolio.cash}"></td>
+        <td th:text="${portfolio.balance}"></td>
+        <td th:text="${portfolio.years}"></td>
+    </tr>
+</table>
+
+<hr/>
+<a href="/portfolio/add">Create a portfolio</a>
+
+</body>
+</html>

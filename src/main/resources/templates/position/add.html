@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org/">
+<head th:replace="fragments :: head"></head>
+<body>
+<!-- <nav th:replace="fragments :: navigation"></nav> -->
+
+    <h1 th:text="${title}"></h1>
+    <p th:unless="${simStock}">No simStock found</p>
+
+    <div>
+        <h2 th:text="${simStock.getName() + ' (' + simStock.getSymbol() + ')'}"></h2>
+        <div>
+            <strong><span th:text="${simStock.getPrice()}"></span></strong>
+            <span th:replace="fragments :: price-cite"></span>
+        </div>
+        <hr />
+        <form method="post" style="max-width:600px;" th:object="${positionForm}">
+            <div class="form-group">
+                <label th:for="symbol">Symbol</label>
+                <input class="form-control" type="hidden" th:field="*{symbol}"
+                th:value="${simStock.getSymbol()}"  th:text="${simStock.getSymbol()}" />
+                <span th:errors="*{symbol}" class="error"></span>
+            </div>
+            <div class="form-group">
+                <label th:for="shares"># of Shares</label>
+                <input class="form-control" th:field="*{shares}" />
+                <span th:errors="*{shares}" class="error"></span>
+            </div>
+            <div class="form-group">
+                <label th:for="percentage">Investment %</label>
+                <input class="form-control" th:field="*{percentage}" />
+                <span th:errors="*{percentage}" class="error"></span>
+            </div>
+            <div class="form-group checkbox">
+                <label th:for="reinvest">Reinvest Shares in this Stock</label>
+                <input class="form-control" type="checkbox" th:field="*{reinvest}" />
+                <span th:errors="*{reinvest}" class="error"></span>
+            </div>
+            <input type="submit" value="Create Position" />
+        </form>
+    </div>
+
+</body>
+<footer th:replace="fragments :: footer"></footer>
+</html>

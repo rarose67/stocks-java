@@ -346,7 +346,15 @@ public class StockDataImporter {
 
         for (int i=0; i<symbols.size(); i++) {
             myArray = myObject.optJSONObject(symbols.get(i)).optJSONArray("chart");
-            mySubObject = myArray.getJSONObject(dtm);
+
+            mySubObject = myArray.optJSONObject(dtm);
+
+            while ((mySubObject == null) && (dtm > 0))
+            {
+                dtm--;
+               // System.out.println("\n" + symbols.get(i));
+                mySubObject = myArray.optJSONObject(dtm);
+            }
 
             stock = stockList.get(symbols.get(i));
             openExist = mySubObject.optString("open", "");

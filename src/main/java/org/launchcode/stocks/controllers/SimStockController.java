@@ -23,8 +23,12 @@ public class SimStockController {
     SimStockData simStockData = SimStockData.getInstance();
 
     @RequestMapping(value = "")  //set Route for home page
-    public String index(Model model)
-    {
+    public String index(Model model, @CookieValue(value = "user", defaultValue = "none") String username) {
+
+        if(username.equals("none")) {
+            return "redirect:/user/login";
+        }
+
         String title ="My simulated Stocks";
 
         //HashMap<String, String> stockMap = simStockData.getSymbolsAndNames();
@@ -46,23 +50,30 @@ public class SimStockController {
     }
 
     @RequestMapping(value = "add", method = RequestMethod.POST)
-    public String processAddForm(Model model, @RequestParam String symbol)
+    public String processAddForm(Model model, @RequestParam String symbol,
+                                 @CookieValue(value = "user", defaultValue = "none") String username)
     {
+        if(username.equals("none")) {
+            return "redirect:/user/login";
+        }
+
         String title ="Simulated Stock";
         model.addAttribute("title", title);
 
         Stock stock = stockData.findBySymbol(symbol);
         SimStock simStock = simStockData.add(stock);
-        double diff = (simStock.getPrice() - simStock.getWeekStartPrice());
-        diff = SimStock.decimalPlaces(diff,2);
-        model.addAttribute("simStock", simStock);
-        model.addAttribute("diff", diff);
-        return "redirect:/simstock/detail/" + simStock.getSymbol();
+
+        return "redirect:/position/add?symbol=" + simStock.getSymbol();
     }
 
     @RequestMapping(value = "detail/{symbol}", method = RequestMethod.GET)  //set Route for home page
-    public String detail(Model model, @PathVariable String symbol)
-    {
+    public String detail(Model model, @PathVariable String symbol,
+                         @CookieValue(value = "user", defaultValue = "none") String username) {
+
+        if(username.equals("none")) {
+            return "redirect:/user/login";
+        }
+
         String title ="Simulated Stock";
         model.addAttribute("title", title);
 
@@ -75,7 +86,11 @@ public class SimStockController {
     }
 
     @RequestMapping(value = "search")
-    public String displaySearchForm(Model model)  {
+    public String displaySearchForm(Model model, @CookieValue(value = "user", defaultValue = "none") String username) {
+
+        if(username.equals("none")) {
+            return "redirect:/user/login";
+        }
 
         StockCompareType[] types = StockCompareType.values();
         model.addAttribute("types", types);
@@ -87,8 +102,13 @@ public class SimStockController {
 
     @RequestMapping(value = "search/results", method = RequestMethod.POST)
     public String processSearchForm(@ModelAttribute @Valid SearchForm newsearch,
-                                    Errors errors, Model model)
-    {
+                                    Errors errors, Model model,
+                                    @CookieValue(value = "user", defaultValue = "none") String username) {
+
+        if(username.equals("none")) {
+            return "redirect:/user/login";
+        }
+
         if (errors.hasErrors()) {
             StockCompareType[] types = StockCompareType.values();
             model.addAttribute("types", types);

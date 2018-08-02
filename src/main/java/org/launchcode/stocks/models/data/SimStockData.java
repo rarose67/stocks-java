@@ -28,11 +28,18 @@ public class SimStockData {
 
     public SimStock add(Stock stock)
     {
-        SimStock simStock = new SimStock(stock);
-        simStocks.add(simStock);
-        symbolsAndNames.put(simStock.getSymbol(), simStock.getName());
+        if (!(symbolsAndNames.containsKey(stock.getSymbol()))) {
+            SimStock simStock = new SimStock(stock);
+            simStocks.add(simStock);
+            symbolsAndNames.put(simStock.getSymbol(), simStock.getName());
 
-        return simStock;
+            return simStock;
+        }
+        else
+        {
+            return findBySymbol(stock.getSymbol());
+        }
+
     }
 
     public SimStock findById(int id) {
