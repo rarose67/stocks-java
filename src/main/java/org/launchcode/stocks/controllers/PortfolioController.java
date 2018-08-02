@@ -1,12 +1,7 @@
 package org.launchcode.stocks.controllers;
 
-import org.launchcode.stocks.models.Portfolio;
-import org.launchcode.stocks.models.Position;
-import org.launchcode.stocks.models.StockCompareType;
-import org.launchcode.stocks.models.User;
-import org.launchcode.stocks.models.data.PortfolioDao;
-import org.launchcode.stocks.models.data.PositionDao;
-import org.launchcode.stocks.models.data.UserDao;
+import org.launchcode.stocks.models.*;
+import org.launchcode.stocks.models.data.*;
 import org.launchcode.stocks.models.forms.SearchForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -19,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.util.ArrayList;
+import java.util.List;
 
 @Controller
 @RequestMapping("portfolio")
@@ -70,6 +66,23 @@ public class PortfolioController {
         response.addCookie(c);
     }
 
+    private StockData stockData = StockData.getInstance();
+
+    private SimStockData simStockData = SimStockData.getInstance();
+
+    public void loadSimPositions(StockData stockData)
+    {
+        if (simStockData.findAll().isEmpty()) {
+            List<String> symbols = positionDao.findSymbols();
+            Stock stock;
+
+            for (String symbol : symbols) {
+                stock = stockData.findBySymbol(symbol);
+                simStockData.add(stock);
+            }
+        }
+    }
+
     // Request path: /portfolio
     @RequestMapping(value = "")
     public String index(Model model,
@@ -94,6 +107,7 @@ public class PortfolioController {
         if(username.equals("none")) {
             return "redirect:/user/login";
         }
+
         User u = userDao.findByUsername(username).get(0);
 
         model.addAttribute("title", "Add portfolio");
@@ -174,6 +188,8 @@ public class PortfolioController {
         if(username.equals("none")) {
             return "redirect:/user/login";
         }
+
+        loadSimPositions(stockData);
 
         Portfolio portfolio = portfolioDao.findOne(portfolioId);
 

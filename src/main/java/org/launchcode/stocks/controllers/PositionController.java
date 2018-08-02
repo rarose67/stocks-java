@@ -33,6 +33,19 @@ public class PositionController {
 
     private SimStockData simStockData = SimStockData.getInstance();
 
+    public void loadSimPositions(StockData stockData)
+    {
+        if (simStockData.findAll().isEmpty()) {
+            List<String> symbols = positionDao.findSymbols();
+            Stock stock;
+
+            for (String symbol : symbols) {
+                stock = stockData.findBySymbol(symbol);
+                simStockData.add(stock);
+            }
+        }
+    }
+
     @RequestMapping(value = "add", method = RequestMethod.GET)
     public String displayAddPositionForm(Model model, @RequestParam String symbol,
                                          @CookieValue(value = "user", defaultValue = "none") String username) {
@@ -41,7 +54,7 @@ public class PositionController {
             return "redirect:/user/login";
         }
 
-        HomeController.loadSimPositions();
+        loadSimPositions(stockData);
         SimStock simStock = simStockData.findBySymbol(symbol);
 
         model.addAttribute("title", "Add Position");
@@ -101,15 +114,7 @@ public class PositionController {
             return "redirect:/user/login";
         }
 
-        if (simStockData.findAll().isEmpty()) {
-            List<String> symbols = positionDao.findSymbols();
-            Stock stock;
-
-            for (String symbol : symbols) {
-                stock = stockData.findBySymbol(symbol);
-                simStockData.add(stock);
-            }
-        }
+        loadSimPositions(stockData);
 
         Position position = positionDao.findOne(positionId);
         SimStock simStock = simStockData.findBySymbol(position.getSymbol());

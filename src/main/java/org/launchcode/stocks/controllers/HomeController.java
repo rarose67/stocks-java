@@ -17,11 +17,11 @@ import java.util.List;
 public class HomeController
 {
     @Autowired
-    private static PositionDao positionDao;
+    private PositionDao positionDao;
 
     private StockData stockData = StockData.getInstance();
 
-    public static void loadSimPositions(StockData stockData)
+    public void loadSimPositions(StockData stockData)
     {
          SimStockData simStockData = SimStockData.getInstance();
 
@@ -34,11 +34,9 @@ public class HomeController
                 simStockData.add(stock);
             }
         }
-
-        //return simStockData;
     }
 
-    public static void loadSimPositions()
+    public void loadSimPositions()
     {
         StockData stockData = StockData.getInstance();
 
@@ -53,8 +51,6 @@ public class HomeController
                 simStockData.add(stock);
             }
         }
-
-        //return simStockData;
     }
 
     @RequestMapping(value = "", method = RequestMethod.GET)
