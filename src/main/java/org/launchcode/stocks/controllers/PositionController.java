@@ -1,13 +1,7 @@
 package org.launchcode.stocks.controllers;
 
-import org.launchcode.stocks.models.Portfolio;
-import org.launchcode.stocks.models.Position;
-import org.launchcode.stocks.models.SimStock;
-import org.launchcode.stocks.models.StockCompareType;
-import org.launchcode.stocks.models.data.PortfolioDao;
-import org.launchcode.stocks.models.data.PositionDao;
-import org.launchcode.stocks.models.data.SimStockData;
-import org.launchcode.stocks.models.data.UserDao;
+import org.launchcode.stocks.models.*;
+import org.launchcode.stocks.models.data.*;
 import org.launchcode.stocks.models.forms.PositionForm;
 import org.launchcode.stocks.models.forms.SearchForm;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +14,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.util.List;
 
 @Controller
 @RequestMapping("position")
@@ -34,7 +29,9 @@ public class PositionController {
     @Autowired
     private UserDao userDao;
 
-    private  SimStockData simStockData = SimStockData.getInstance();
+    private StockData stockData = StockData.getInstance();
+
+    private SimStockData simStockData = SimStockData.getInstance();
 
     @RequestMapping(value = "add", method = RequestMethod.GET)
     public String displayAddPositionForm(Model model, @RequestParam String symbol,
@@ -44,6 +41,7 @@ public class PositionController {
             return "redirect:/user/login";
         }
 
+        HomeController.loadSimPositions();
         SimStock simStock = simStockData.findBySymbol(symbol);
 
         model.addAttribute("title", "Add Position");
@@ -103,6 +101,15 @@ public class PositionController {
             return "redirect:/user/login";
         }
 
+        if (simStockData.findAll().isEmpty()) {
+            List<String> symbols = positionDao.findSymbols();
+            Stock stock;
+
+            for (String symbol : symbols) {
+                stock = stockData.findBySymbol(symbol);
+                simStockData.add(stock);
+            }
+        }
         Position position = positionDao.findOne(positionId);
         SimStock simStock = simStockData.findBySymbol(position.getSymbol());
 

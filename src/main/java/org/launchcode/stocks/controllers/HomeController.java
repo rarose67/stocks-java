@@ -17,27 +17,50 @@ import java.util.List;
 public class HomeController
 {
     @Autowired
-    private PositionDao positionDao;
+    private static PositionDao positionDao;
 
     private StockData stockData = StockData.getInstance();
 
-    private SimStockData simStockData = SimStockData.getInstance();
-
-    @RequestMapping(value = "", method = RequestMethod.GET)
-    public String index()
+    public static void loadSimPositions(StockData stockData)
     {
-        if (simStockData.findAll().isEmpty())
-        {
+         SimStockData simStockData = SimStockData.getInstance();
+
+        if (simStockData.findAll().isEmpty()) {
             List<String> symbols = positionDao.findSymbols();
             Stock stock;
 
-            for (String symbol : symbols)
-            {
+            for (String symbol : symbols) {
                 stock = stockData.findBySymbol(symbol);
                 simStockData.add(stock);
             }
         }
 
+        //return simStockData;
+    }
+
+    public static void loadSimPositions()
+    {
+        StockData stockData = StockData.getInstance();
+
+        SimStockData simStockData = SimStockData.getInstance();
+
+        if (simStockData.findAll().isEmpty()) {
+            List<String> symbols = positionDao.findSymbols();
+            Stock stock;
+
+            for (String symbol : symbols) {
+                stock = stockData.findBySymbol(symbol);
+                simStockData.add(stock);
+            }
+        }
+
+        //return simStockData;
+    }
+
+    @RequestMapping(value = "", method = RequestMethod.GET)
+    public String index()
+    {
+        loadSimPositions(stockData);
         return "home";
     }
 }

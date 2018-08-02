@@ -19,7 +19,6 @@ import java.util.HashMap;
 public class StockController {
 
     StockData stockData = StockData.getInstance();
-    //SimStockData simStockData = SimStockData.getInstance();
 
     @RequestMapping(value = "")  //set Route for home page
     public String index(Model model)
