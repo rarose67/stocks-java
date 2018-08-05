@@ -22,4 +22,6 @@ public interface PositionDao extends CrudRepository<Position, Integer> {
     @Query("SELECT DISTINCT p.symbol FROM Position p")
     public List<String> findSymbols();
 
+    public List<Position> findByPortfolio_idOrderByPercentageDesc(int portfolioId);
+
 }

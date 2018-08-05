@@ -1,5 +1,7 @@
 package org.launchcode.stocks.models;
 
+import org.launchcode.stocks.models.data.StockData;
+
 import java.util.GregorianCalendar;
 import java.util.Random;
 
@@ -93,8 +95,10 @@ public class SimStock {
         return price;
     }
 
-    public void setPrice(double aPrice) {
+    public void setPrice(double aPrice)
+    {
         this.price = decimalPlaces(aPrice, 2);
+        setYield();
     }
 
     public double getVariance() {
@@ -125,7 +129,7 @@ public class SimStock {
         return nextDividendDate;
     }
 
-    public String getDate()
+    public String showDate()
     {
         String date = nextDividendDate.get(GregorianCalendar.MONTH)+1 + "/" +
                 nextDividendDate.get(GregorianCalendar.DAY_OF_MONTH) + "/" +
@@ -181,7 +185,7 @@ public class SimStock {
         this.yield = decimalPlaces(this.yield, 2);
     }
 
-    private void trade()
+    public void trade()
     {
         double start = - (this.getVariance());
         double range = this.getVariance() *2.0;
@@ -190,12 +194,40 @@ public class SimStock {
         setPrice(getPrice() + change);
     }
 
-    public void adjustVariance()
+    public void adjustMVariance(double days)
     {
         double change = getPrice() - getMonthStartPrice();
-        double month1ChangePercent = change / 30.0;
+        double month1ChangePercent = change / days;
         setVariance(Math.abs(price * month1ChangePercent));
         setMonthStartPrice(getPrice());
+    }
+
+    public void adjustWVariance(double days)
+    {
+        double change = getPrice() - getWeekStartPrice();
+        double weekChangePercent = change / days;
+        setVariance(Math.abs(price * weekChangePercent));
+        this.setWeekStartPrice(getPrice());
+    }
+
+    public void reset() {
+
+        StockData stockData = StockData.getInstance();
+        Stock stock = stockData.findBySymbol(this.symbol);
+
+        int year = stock.getLastDividendDate().get(GregorianCalendar.YEAR);
+        int month = stock.getLastDividendDate().get(GregorianCalendar.MONTH);
+        int day = stock.getLastDividendDate().get(GregorianCalendar.DAY_OF_MONTH);
+
+        setPrice(stock.getPrice());
+        setVariance(stock.getVariance());
+        setDividend(stock.getDividend());
+        setqDividend(stock.getDividend() / 4.0);
+        this.nextDividendDate = new GregorianCalendar(year, month, day);
+        nextDividendDate();
+        setWeekStartPrice(stock.getWeekStartPrice());
+        setMonthStartPrice(stock.getWeekStartPrice());
+        setYield();
     }
 
     @Override
@@ -209,7 +241,7 @@ public class SimStock {
                 ", yearly dividend=" + dividend +
                 ", Quarterly Dividend=" + qDividend +
                 ", Annual yield=" + yield +
-                ", nextDividendDate=" + getDate() +
+                ", nextDividendDate=" + showDate() +
                 ", weekStartPrice=" + weekStartPrice +
                 '}';
     }

@@ -177,7 +177,6 @@ public class StockDataImporter {
 
         String address = "https://api.iextrading.com/1.0/stock/market/batch?symbols=" + symbolString + "&types=stats";
         String response = apiConnect(address);
-        //System.out.println("\n" + address);
 
         myObject = new JSONObject(response);
 
@@ -348,15 +347,22 @@ public class StockDataImporter {
             myArray = myObject.optJSONObject(symbols.get(i)).optJSONArray("chart");
 
             mySubObject = myArray.optJSONObject(dtm);
+            stock = stockList.get(symbols.get(i));
 
             while ((mySubObject == null) && (dtm > 0))
             {
                 dtm--;
-               // System.out.println("\n" + symbols.get(i));
+                //System.out.println("\n" + symbols.get(i));
                 mySubObject = myArray.optJSONObject(dtm);
             }
 
-            stock = stockList.get(symbols.get(i));
+            if(mySubObject == null)
+            {
+                stock.setWeekStartPrice(-1.0);
+                continue;
+            }
+
+
             openExist = mySubObject.optString("open", "");
             if (!(openExist.equals("")))
             {
@@ -444,6 +450,7 @@ public class StockDataImporter {
     {
         JSONObject myObject, mySubObject;
         JSONObject myObject2, mySubObject2;
+        JSONObject myObject3, mySubObject3;
         Stock stock;
         String name;
         double month1ChangePercent, price, variance, yield;
@@ -456,8 +463,13 @@ public class StockDataImporter {
                 "&types=previous&filter=close";
         String response2 = apiConnect(address2);
 
+        String address3 = "https://api.iextrading.com/1.0/stock/market/batch?symbols=" + symbolString +
+                "&types=quote&filter=open";
+        String response3 = apiConnect(address3);
+
         myObject = new JSONObject(response);
         myObject2 = new JSONObject(response2);
+        myObject3 = new JSONObject(response3);
 
         for (int i=0; i<symbols.size(); i++)
         {
@@ -465,8 +477,15 @@ public class StockDataImporter {
             mySubObject2 = myObject2.optJSONObject(symbols.get(i)).optJSONObject("previous");
 
             name = mySubObject.getString("companyName");
-            month1ChangePercent = ((Number) mySubObject.get("month1ChangePercent")).doubleValue();
-            price = ((Number) mySubObject2.get("close")).doubleValue();
+            //System.out.println("\n" + symbols.get(i));
+            month1ChangePercent = mySubObject.optDouble("month1ChangePercent", 0.0);
+            price = mySubObject2.optDouble("close",-1.0);
+            if (price == -1.0)
+            {
+                mySubObject3 = myObject3.optJSONObject(symbols.get(i)).optJSONObject("quote");
+                price = mySubObject3.optDouble("open",-1.0);
+                System.out.println("\n" + symbols.get(i) + " : " + price);
+            }
             variance = Math.abs(price * month1ChangePercent);
 
             stock = stockList.get(symbols.get(i));

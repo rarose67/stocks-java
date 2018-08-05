@@ -19,7 +19,7 @@ public class Position {
     private String symbol;
 
     @Transient
-    private SimStock stock;
+    private SimStock simStock;
 
     @NotNull
     @Min(0)
@@ -43,10 +43,10 @@ public class Position {
         this.openDate = (GregorianCalendar) GregorianCalendar.getInstance();
     }
 
-    public Position(SimStock stock, int shares, int percentage, boolean reinvest) {
+    public Position(SimStock simStock, int shares, int percentage, boolean reinvest) {
         this();
-        this.symbol = stock.getSymbol();
-        this.stock = stock;
+        this.symbol = simStock.getSymbol();
+        this.simStock = simStock;
         this.shares = shares;
         this.percentage = percentage;
         this.reinvest = reinvest;
@@ -60,15 +60,16 @@ public class Position {
         return symbol;
     }
 
-    public SimStock getStock()
+    public SimStock getSimStock()
     {
-        if (stock != null) {
-            return stock;
+        if (simStock != null) {
+            return this.simStock;
         }
         else
         {
             SimStockData simStockData = SimStockData.getInstance();
             SimStock simStock = simStockData.findBySymbol(this.symbol);
+            this.simStock = simStock;
             return simStock;
         }
     }
@@ -97,8 +98,8 @@ public class Position {
         this.portfolio = aPortfolio;
     }
 
-    public void setStock(SimStock aStock) {
-        this.stock = aStock;
+    public void setSimStock(SimStock aStock) {
+        this.simStock = aStock;
         this.symbol = aStock.getSymbol();
     }
 
@@ -121,5 +122,53 @@ public class Position {
 
     public void setOpenDate(@NotNull GregorianCalendar openDate) {
         this.openDate = openDate;
+    }
+
+    /**
+     * Recalculate the average change in the simStock's price after a given number of days.
+     * @param days The
+     */
+    public void avg_change(int days)
+    {
+        double avgPrice;
+        double numDays = (double) days;
+
+        if (days >= 30)
+        {
+            this.getSimStock().adjustMVariance(numDays);
+        }
+        else
+        {
+            this.getSimStock().adjustWVariance(numDays);
+        }
+    }
+
+    private void buyShares(int shares)
+    {
+        this.setShares(this.getShares() + shares);
+    }
+
+    public double quarter(double money)
+    {
+        double funds;
+        double newMoney = SimStock.decimalPlaces(((this.getSimStock().getqDividend()) * this.getShares()), 2);
+
+        if (this.isReinvest() == false)
+        {
+            funds = (money + newMoney) * (this.getPercentage() / 100.0);
+            money -= funds;
+        }
+        else
+        {
+            funds = newMoney;
+        }
+
+        int newShares = (int) (Math.floor(funds / simStock.getPrice()));
+        buyShares(newShares);
+        System.out.println("\nBought " + newShares + " shares of " + this.getSymbol() +" at $"
+                + simStock.getPrice());
+
+        money += SimStock.decimalPlaces((funds - (newShares * simStock.getPrice())), 2);
+        return money;
     }
 }

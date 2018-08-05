@@ -4,7 +4,7 @@ import javax.persistence.*;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.util.ArrayList;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 @Entity
@@ -36,14 +36,13 @@ public class Portfolio {
     @ManyToOne
     private User user;
 
-    public Portfolio()
-    {
+    public Portfolio() {
         this.balance = 0;
         this.years = 0;
     }
 
     public Portfolio(@NotNull String name, double cash) {
-        this() ;
+        this();
         this.name = name;
         this.cash = cash;
         this.balance = cash;
@@ -97,22 +96,88 @@ public class Portfolio {
         this.user = aUser;
     }
 
-    public void addItem(Position item)
-    {
+    public void addItem(Position item) {
         this.positions.add(item);
     }
 
-    public void removeItem(Position item)
-    {
+    public void removeItem(Position item) {
         this.positions.remove(item);
     }
 
-    public void recalculate(int years)
-    {
-        for(int i=0; i < positions.size(); i++)
-        {
+    private boolean isMarketOpen(GregorianCalendar date) {
+        int doy = date.get(GregorianCalendar.DAY_OF_YEAR);
+        int dow = date.get(GregorianCalendar.DAY_OF_WEEK);
 
+        if (date.isLeapYear(date.get(GregorianCalendar.YEAR))) {
+            if ((dow % 6 == 0) || (dow % 7 == 0) || (doy == 1) || (doy == 15) || (doy == 50) || (doy == 90)
+                    || (doy == 149) || (doy == 186) || (doy == 247) || (doy == 327) || (doy == 360)) {
+                return false;
+            } else {
+                return true;
+            }
+        } else {
+            if ((dow % 6 == 0) || (dow % 7 == 0) || (doy == 1) || (doy == 15) || (doy == 50) || (doy == 89)
+                    || (doy == 148) || (doy == 185) || (doy == 246) || (doy == 326) || (doy == 359)) {
+                return false;
+            } else {
+                return true;
+            }
         }
     }
+
+    public void calculate(int years) {
+
+        if (this.years > 0)
+        {
+            reset();
+        }
+
+        GregorianCalendar day = (GregorianCalendar) GregorianCalendar.getInstance();
+        GregorianCalendar finalDay = (GregorianCalendar) GregorianCalendar.getInstance();
+        finalDay.add(GregorianCalendar.YEAR, years);
+        int trading_days_this_week = 0;
+
+        while (!(day.after(finalDay))) {
+            for (Position position : positions) {
+                SimStock simStock = position.getSimStock();
+
+                if (isMarketOpen(day)) {
+                    trading_days_this_week++;
+                    simStock.trade();
+
+                    if (!(day.before(simStock.getNextDividendDate()))) {
+                        this.cash = position.quarter(this.cash);
+                        simStock.nextDividendDate();
+                    }
+                }
+
+                if (day.get(GregorianCalendar.DAY_OF_WEEK) == GregorianCalendar.SUNDAY) {
+                    simStock.adjustWVariance(trading_days_this_week);
+                    trading_days_this_week = 0;
+                }
+            }
+
+            day.add(GregorianCalendar.DATE, 1);
+        }
+
+        double balance = 0.0;
+
+        for (Position position : positions)
+        {
+            balance += (position.getSimStock().getPrice() * position.getShares());
+        }
+        balance += this.cash;
+
+        setBalance(balance);
+    }
+
+    public void reset()
+    {
+        for (Position position : positions)
+        {
+            position.getSimStock().reset();
+        }
+    }
+
 }
 

@@ -130,8 +130,15 @@ public class Stock {
         return weekStartPrice;
     }
 
-    public void setWeekStartPrice(double aWeekStartPrice) {
-        this.weekStartPrice = aWeekStartPrice;
+    public void setWeekStartPrice(double aWeekStartPrice)
+    {
+        if (aWeekStartPrice < 0.0)
+        {
+            this.weekStartPrice = this.price;
+        }
+        else {
+            this.weekStartPrice = aWeekStartPrice;
+        }
     }
 
     public double getYield() {

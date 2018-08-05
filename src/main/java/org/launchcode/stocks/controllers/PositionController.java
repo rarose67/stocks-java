@@ -176,7 +176,14 @@ public class PositionController {
         changedPosition.setPercentage(changedPositionForm.getPercentage());
         changedPosition.setReinvest(changedPositionForm.isReinvest());
 
-        positionDao.save(changedPosition);
-        return "redirect:/position/view/" + changedPosition.getId();
+        if(changedPosition.getShares() > 0) {
+            positionDao.save(changedPosition);
+            return "redirect:/position/view/" + changedPosition.getId();
+        }
+        else
+        {
+            positionDao.delete(changedPosition.getId());
+            return "redirect:/portfolio/view/" + changedPosition.getPortfolio().getId();
+        }
     }
 }

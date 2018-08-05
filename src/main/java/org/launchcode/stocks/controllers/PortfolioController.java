@@ -265,4 +265,64 @@ public class PortfolioController {
 
         return "redirect:view/"+ portfolio.getId();
     }
+
+    @RequestMapping(value = "edit", method = RequestMethod.GET)
+    public String displayEditForm(Model model,
+                                  @CookieValue(value = "portfolio", defaultValue = "-1") String portfolioId,
+                                  @CookieValue(value = "user", defaultValue = "none") String username) {
+
+        if(username.equals("none")) {
+            return "redirect:/user/login";
+        }
+
+        if(portfolioId.equals("-1")) {
+            return "redirect:/portfolio";
+        }
+
+
+        String title ="Edit a portfolio";
+        Portfolio changedPortfolio;
+
+        model.addAttribute("title", title);
+
+        int pId = Integer.parseInt(portfolioId);
+        changedPortfolio = portfolioDao.findOne(pId);
+
+
+        model.addAttribute("portfolio", changedPortfolio);
+
+        return "portfolio/edit";
+    }
+
+    @RequestMapping(value = "edit", method = RequestMethod.POST)
+    public String processEditportfolioForm(@ModelAttribute @Valid Portfolio changedPortfolioForm,
+                                          Errors errors, Model model,
+                                          @CookieValue(value = "portfolio", defaultValue = "-1") String portfolioId,
+                                          @CookieValue(value = "user", defaultValue = "none") String username) {
+
+        if(username.equals("none")) {
+            return "redirect:/user/login";
+        }
+
+        if(portfolioId.equals("-1")) {
+            return "redirect:/portfolio";
+        }
+
+
+        if (errors.hasErrors()) {
+            model.addAttribute("title", "Add portfolio");
+
+            return "portfolio/edit";
+        }
+
+        Integer pId = Integer.parseInt(portfolioId);
+        Portfolio changedPortfolio = portfolioDao.findOne(pId);
+
+        changedPortfolio.setName(changedPortfolioForm.getName());
+        changedPortfolio.setCash(changedPortfolioForm.getCash());
+        changedPortfolio.setYears(changedPortfolioForm.getYears());
+
+        portfolioDao.save(changedPortfolio);
+        return "redirect:/portfolio/view/" + changedPortfolio.getId();
+    }
 }

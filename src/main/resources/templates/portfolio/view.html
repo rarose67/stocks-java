@@ -23,7 +23,7 @@
 
         <tr th:each="position : ${portfolio.getPositions()}">
             <td><a th:href="@{'/position/view/' + ${position.id}}" th:text="${position.symbol}"></a></td>
-            <td th:text="${position.getStock().name}"></td>
+            <td th:text="${position.getSimStock().name}"></td>
             <td th:text="${position.shares}"></td>
             <td th:text="${position.percentage} + '%'"></td>
             <td th:text="${position.reinvest}"></td>
@@ -34,7 +34,10 @@
     <p th:text="${'# of Years Projected: ' + portfolio.getYears()}"></p>
 </div>
 
-    <p><a th:href="'/portfolio/add-item/' + ${portfolio.id}">Add Position</a></p>
+    <p>
+        <a th:href="'/portfolio/add-item/' + ${portfolio.id}">Add Position</a>
+        <a href="/portfolio/edit">Edit Portfolio</a>
+    </p>
 
 </body>
 <footer>
