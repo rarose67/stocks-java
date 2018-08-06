@@ -77,7 +77,7 @@ public class StockDateField extends StockField
         this.value = new GregorianCalendar(year, month-1, day);
     }
 
-    private static int compare(GregorianCalendar value, GregorianCalendar date) {
+    public static int compare(GregorianCalendar value, GregorianCalendar date) {
         int result;
 
         if (value.get(GregorianCalendar.YEAR) > date.get(GregorianCalendar.YEAR)) {

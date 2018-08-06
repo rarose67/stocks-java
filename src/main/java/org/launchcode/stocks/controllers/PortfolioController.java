@@ -325,4 +325,27 @@ public class PortfolioController {
         portfolioDao.save(changedPortfolio);
         return "redirect:/portfolio/view/" + changedPortfolio.getId();
     }
+
+    @RequestMapping(value = "simulate", method = RequestMethod.POST)
+    public String simulate(Model model, @RequestParam int years,
+                                         @CookieValue(value = "portfolio", defaultValue = "-1") String portfolioId,
+                                         @CookieValue(value = "user", defaultValue = "none") String username) {
+
+        if(username.equals("none")) {
+            return "redirect:/user/login";
+        }
+
+        if(portfolioId.equals("-1")) {
+            return "redirect:/portfolio";
+        }
+
+        int pId = Integer.parseInt(portfolioId);
+        Portfolio p = portfolioDao.findOne(pId);
+
+        p.calculate(years);
+        p.setYears(years);
+        portfolioDao.save(p);
+        return "redirect:view/" + p.getId();
+    }
+
 }

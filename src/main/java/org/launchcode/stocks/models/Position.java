@@ -143,32 +143,38 @@ public class Position {
         }
     }
 
-    private void buyShares(int shares)
+    private void buyShares(int aShares)
+
     {
-        this.setShares(this.getShares() + shares);
+        if(aShares >= 0) {
+            this.setShares(this.getShares() + aShares);
+        }
     }
 
     public double quarter(double money)
     {
         double funds;
-        double newMoney = SimStock.decimalPlaces(((this.getSimStock().getqDividend()) * this.getShares()), 2);
+        double dividend = SimStock.decimalPlaces(((this.getSimStock().getqDividend()) * this.getShares()), 2);
+        double newMoney = SimStock.decimalPlaces((money + dividend), 2);
 
         if (this.isReinvest() == false)
         {
-            funds = (money + newMoney) * (this.getPercentage() / 100.0);
-            money -= funds;
+            funds = newMoney * (this.getPercentage() / 100.0);
         }
         else
         {
-            funds = newMoney;
+            funds = dividend;
         }
+
+        newMoney -= funds;
+        System.out.println("\nYou have " + this.getShares() + " shares of " + this.getSymbol());
 
         int newShares = (int) (Math.floor(funds / simStock.getPrice()));
         buyShares(newShares);
-        System.out.println("\nBought " + newShares + " shares of " + this.getSymbol() +" at $"
-                + simStock.getPrice());
+        System.out.println("Bought " + newShares + " shares of " + this.getSymbol() +" at $"
+                + simStock.getPrice() + " and now have " + this.getShares() + " shares.");
 
-        money += SimStock.decimalPlaces((funds - (newShares * simStock.getPrice())), 2);
-        return money;
+        newMoney += SimStock.decimalPlaces((funds - (newShares * simStock.getPrice())), 2);
+        return newMoney;
     }
 }

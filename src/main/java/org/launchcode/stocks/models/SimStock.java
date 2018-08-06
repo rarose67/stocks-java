@@ -59,8 +59,8 @@ public class SimStock {
         setVariance(stock.getVariance());
         setDividend(stock.getDividend());
         setqDividend(stock.getDividend() / 4.0);
-        this.nextDividendDate = new GregorianCalendar(year, month, day);
-        nextDividendDate();
+        GregorianCalendar lastDividendDate = new GregorianCalendar(year, month, day);
+        setNextDividendDate(lastDividendDate);
         setWeekStartPrice(stock.getWeekStartPrice());
         setMonthStartPrice(stock.getWeekStartPrice());
         setYield();
@@ -97,8 +97,15 @@ public class SimStock {
 
     public void setPrice(double aPrice)
     {
-        this.price = decimalPlaces(aPrice, 2);
-        setYield();
+        if (aPrice > 0.0)
+        {
+            this.price = decimalPlaces(aPrice, 2);
+            setYield();
+        }
+        else
+        {
+            this.price = 0.0;
+        }
     }
 
     public double getVariance() {
@@ -144,7 +151,7 @@ public class SimStock {
 
         this.nextDividendDate = aLastDividendDate;
 
-        while (this.nextDividendDate.before(today))
+        while (StockDateField.compare(this.nextDividendDate, today) < 0)
         {
             this.nextDividendDate.add(GregorianCalendar.MONTH, 3);
         }
@@ -152,12 +159,7 @@ public class SimStock {
 
     public void nextDividendDate()
     {
-        GregorianCalendar today = (GregorianCalendar) GregorianCalendar.getInstance();
-
-        while (this.nextDividendDate.before(today))
-        {
-            this.nextDividendDate.add(GregorianCalendar.MONTH, 3);
-        }
+        this.nextDividendDate.add(GregorianCalendar.MONTH, 3);
     }
 
     public double getWeekStartPrice() {
@@ -198,7 +200,7 @@ public class SimStock {
     {
         double change = getPrice() - getMonthStartPrice();
         double month1ChangePercent = change / days;
-        setVariance(Math.abs(price * month1ChangePercent));
+        setVariance(Math.abs(month1ChangePercent));
         setMonthStartPrice(getPrice());
     }
 
@@ -206,7 +208,7 @@ public class SimStock {
     {
         double change = getPrice() - getWeekStartPrice();
         double weekChangePercent = change / days;
-        setVariance(Math.abs(price * weekChangePercent));
+        setVariance(Math.abs(weekChangePercent));
         this.setWeekStartPrice(getPrice());
     }
 
@@ -223,8 +225,8 @@ public class SimStock {
         setVariance(stock.getVariance());
         setDividend(stock.getDividend());
         setqDividend(stock.getDividend() / 4.0);
-        this.nextDividendDate = new GregorianCalendar(year, month, day);
-        nextDividendDate();
+        GregorianCalendar lastDividendDate = new GregorianCalendar(year, month, day);
+        setNextDividendDate(lastDividendDate);
         setWeekStartPrice(stock.getWeekStartPrice());
         setMonthStartPrice(stock.getWeekStartPrice());
         setYield();

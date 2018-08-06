@@ -109,14 +109,14 @@ public class Portfolio {
         int dow = date.get(GregorianCalendar.DAY_OF_WEEK);
 
         if (date.isLeapYear(date.get(GregorianCalendar.YEAR))) {
-            if ((dow % 6 == 0) || (dow % 7 == 0) || (doy == 1) || (doy == 15) || (doy == 50) || (doy == 90)
+            if ((dow == GregorianCalendar.SATURDAY) || (dow == GregorianCalendar.SUNDAY) || (doy == 1) || (doy == 15) || (doy == 50) || (doy == 90)
                     || (doy == 149) || (doy == 186) || (doy == 247) || (doy == 327) || (doy == 360)) {
                 return false;
             } else {
                 return true;
             }
         } else {
-            if ((dow % 6 == 0) || (dow % 7 == 0) || (doy == 1) || (doy == 15) || (doy == 50) || (doy == 89)
+            if ((dow == GregorianCalendar.SATURDAY) || (dow == GregorianCalendar.SUNDAY) || (doy == 1) || (doy == 15) || (doy == 50) || (doy == 89)
                     || (doy == 148) || (doy == 185) || (doy == 246) || (doy == 326) || (doy == 359)) {
                 return false;
             } else {
@@ -137,15 +137,22 @@ public class Portfolio {
         finalDay.add(GregorianCalendar.YEAR, years);
         int trading_days_this_week = 0;
 
-        while (!(day.after(finalDay))) {
+        System.out.println("\nFinal Date: " + (finalDay.get(GregorianCalendar.MONTH)+1) +
+                "/" + finalDay.get(GregorianCalendar.DATE) + "/" + finalDay.get(GregorianCalendar.YEAR));
+
+        while (StockDateField.compare(day, finalDay) <= 0) {
+
             for (Position position : positions) {
                 SimStock simStock = position.getSimStock();
 
                 if (isMarketOpen(day)) {
-                    trading_days_this_week++;
                     simStock.trade();
 
-                    if (!(day.before(simStock.getNextDividendDate()))) {
+                    if (StockDateField.compare(day, simStock.getNextDividendDate()) >= 0)
+                    {
+                        System.out.println("\n" + position.getSymbol() +
+                                "\nDate: " + (day.get(GregorianCalendar.MONTH)+1) + "/" + day.get(GregorianCalendar.DATE) + "/" + day.get(GregorianCalendar.YEAR) +
+                                "\nDivDate: " + simStock.showDate());
                         this.cash = position.quarter(this.cash);
                         simStock.nextDividendDate();
                     }
@@ -153,12 +160,22 @@ public class Portfolio {
 
                 if (day.get(GregorianCalendar.DAY_OF_WEEK) == GregorianCalendar.SUNDAY) {
                     simStock.adjustWVariance(trading_days_this_week);
-                    trading_days_this_week = 0;
                 }
+            }
+
+            if (isMarketOpen(day)) {
+                trading_days_this_week++;
+            }
+            else if (day.get(GregorianCalendar.DAY_OF_WEEK) == GregorianCalendar.SUNDAY)
+            {
+                trading_days_this_week = 0;
             }
 
             day.add(GregorianCalendar.DATE, 1);
         }
+
+        System.out.println("\nLast Date: " + (day.get(GregorianCalendar.MONTH)+1) +
+                "/" + day.get(GregorianCalendar.DATE) + "/" + day.get(GregorianCalendar.YEAR));
 
         double balance = 0.0;
 
