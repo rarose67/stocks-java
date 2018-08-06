@@ -66,8 +66,8 @@ public class SimStockController {
         return "redirect:/position/add?symbol=" + simStock.getSymbol();
     }
 
-    @RequestMapping(value = "detail/{symbol}", method = RequestMethod.GET)  //set Route for home page
-    public String detail(Model model, @PathVariable String symbol,
+    @RequestMapping(value = "detail/", method = RequestMethod.GET)  //set Route for home page
+    public String detail(Model model, @RequestParam String symbol,
                          @CookieValue(value = "user", defaultValue = "none") String username) {
 
         if(username.equals("none")) {
@@ -121,7 +121,7 @@ public class SimStockController {
 
         if (!(newsearch.getSymbol().equals("")))
         {
-            StockStringField field = new StockStringField(StockFieldType.SYMBOL, newsearch.getName());
+            StockStringField field = new StockStringField(StockFieldType.SYMBOL, newsearch.getSymbol());
             fields.add(field);
         }
         if (!(newsearch.getName().equals("")))

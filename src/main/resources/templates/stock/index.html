@@ -10,7 +10,7 @@
     <h2 th:text="${stocks.size()} + ' stocks'"></h2>
     <ul>
         <li th:each ="symbol : ${symbols}">
-                <a th:href="@{'/stock/detail/' + ${symbol}}" th:text="${symbol}"></a>
+            <a th:href="@{'/stock/detail?symbol=' + ${symbol}}" th:text="${symbol}"></a>
             <span th:text="${' : ' + stocks.get(symbol)}"></span>
         </li>
     </ul>

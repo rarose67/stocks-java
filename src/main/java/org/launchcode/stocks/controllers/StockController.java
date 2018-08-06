@@ -36,6 +36,7 @@ public class StockController {
         return "stock/index";
     }
 
+    /**
     @RequestMapping(value = "add")  //set Route for home page
     public String displayAddForm(Model model)
     {
@@ -43,6 +44,7 @@ public class StockController {
         model.addAttribute("title", title);
         return "add";
     }
+
 
     @RequestMapping(value = "detail")  //set Route for home page
     public String processAddForm(Model model, @RequestParam String symbol)
@@ -56,15 +58,19 @@ public class StockController {
         model.addAttribute("stock", stock);
         model.addAttribute("diff", diff);
         return "stock/detail";
-    }
+    } */
 
-    @RequestMapping(value = "detail/{symbol}", method = RequestMethod.GET)  //set Route for home page
-    public String detail(Model model, @PathVariable String symbol)
+    @RequestMapping(value = "detail", method = RequestMethod.GET)  //set Route for home page
+    public String detail(Model model, @RequestParam String symbol)
     {
         String title ="Stock";
         model.addAttribute("title", title);
 
         Stock stock = stockData.findBySymbol(symbol);
+        if(stock == null)
+        {
+            System.out.println("\n invalid: " + symbol);
+        }
         double diff = (stock.getPrice() - stock.getWeekStartPrice());
         diff = Math.floor((diff*100.0)+0.5)/100.00;
         model.addAttribute("stock", stock);
@@ -99,7 +105,7 @@ public class StockController {
 
         if (!(newsearch.getSymbol().equals("")))
         {
-            StockStringField field = new StockStringField(StockFieldType.SYMBOL, newsearch.getName());
+            StockStringField field = new StockStringField(StockFieldType.SYMBOL, newsearch.getSymbol());
             fields.add(field);
         }
         if (!(newsearch.getName().equals("")))
@@ -171,7 +177,7 @@ public class StockController {
                 Collections.sort(symbols);
 
                 model.addAttribute("stocks", stockMap);
-                model.addAttribute("title", foundStocks.size() + "Stocks found");
+                model.addAttribute("title", foundStocks.size() + " Stocks found");
                 model.addAttribute("symbols", symbols);
 
                 return "stock/index";
@@ -195,7 +201,7 @@ public class StockController {
             model.addAttribute("title", title);
             model.addAttribute("symbols", symbols);
 
-            return "stock/index";
+            return "stock/results";
         }
     }
 }

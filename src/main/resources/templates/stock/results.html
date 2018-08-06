@@ -9,9 +9,9 @@
 
     <h1 th:text="${stocks.size()} + ' stocks'"></h1>
     <ul>
-        <li th:each ="stock : ${stocks}">
-                <a th:href="@{'/stock/detail/' + ${stock.getSymbol()}}" th:text="${stock.getSymbol()}"></a>
-            <span th:text="${' : ' + stocks.stock.getName()}"></span>
+        <li th:each ="symbol : ${symbols}">
+            <a th:href="@{'/stock/detail?symbol=' + ${symbol}}" th:text="${symbol}"></a>
+            <span th:text="${' : ' + stocks.get(symbol)}"></span>
         </li>
     </ul>
 
