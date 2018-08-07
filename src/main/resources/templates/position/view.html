@@ -11,7 +11,7 @@
         <h2 th:text="${simstock.getName() + ' (' + simstock.getSymbol() + ')'}"></h2>
         <div>
             <strong><span th:text="${simstock.getPrice()} + '*'"></span></strong>
-            <span th:replace="fragments :: price-cite"></span>
+            <span th:replace="fragments :: price"></span>
         </div>
         <hr />
         <table>

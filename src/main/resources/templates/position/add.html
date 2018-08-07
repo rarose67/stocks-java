@@ -11,7 +11,7 @@
         <h2 th:text="${simStock.getName() + ' (' + simStock.getSymbol() + ')'}"></h2>
         <div>
             <strong><span th:text="${simStock.getPrice()} + '*'"></span></strong>
-            <span th:replace="fragments :: price-cite"></span>
+            <span th:replace="fragments :: price"></span>
         </div>
         <hr />
         <form method="post" style="max-width:600px;" th:object="${positionForm}">
