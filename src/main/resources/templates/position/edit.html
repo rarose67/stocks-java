@@ -10,7 +10,7 @@
     <div>
         <h2 th:text="${simStock.getName() + ' (' + simStock.getSymbol() + ')'}"></h2>
         <div>
-            <strong><span th:text="${simStock.getPrice()}"></span></strong>
+            <strong><span th:text="${simStock.getPrice()} + '*'"></span></strong>
             <span th:replace="fragments :: price-cite"></span>
         </div>
         <hr />
@@ -26,12 +26,12 @@
                 <span th:errors="*{shares}" class="error"></span>
             </div>
             <div class="form-group">
-                <label th:for="percentage">Investment %</label>
+                <label th:for="percentage">** Investment %</label>
                 <input class="form-control" th:field="*{percentage}" />
                 <span th:errors="*{percentage}" class="error"></span>
             </div>
             <div class="form-group checkbox">
-                <label th:for="reinvest">Reinvest Shares in this Stock</label>
+                <label th:for="reinvest">*** Reinvest Shares in this Stock</label>
                 <input class="form-control" type="checkbox" th:field="*{reinvest}" />
                 <span th:errors="*{reinvest}" class="error"></span>
             </div>
@@ -41,6 +41,12 @@
 
 </body>
 <footer>
+    <hr />
+    <div>
+        <p>** - The percentage of the cash pool to use to reinvest in this position.</p>
+        <p>*** - whether or not reinvest all the stock's dividends back into it. After buying shares, add the
+            remainder to the cash pool</p>
+    </div>
     <div th:replace="fragments :: data-cite"></div>
 </footer>
 </html>

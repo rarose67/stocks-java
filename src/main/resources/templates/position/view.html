@@ -10,7 +10,7 @@
     <div>
         <h2 th:text="${simstock.getName() + ' (' + simstock.getSymbol() + ')'}"></h2>
         <div>
-            <strong><span th:text="${simstock.getPrice()}"></span></strong>
+            <strong><span th:text="${simstock.getPrice()} + '*'"></span></strong>
             <span th:replace="fragments :: price-cite"></span>
         </div>
         <hr />
@@ -35,7 +35,7 @@
                 <td th:text="${position.percentage}"></td>
             </tr>
             <tr>
-                <td><Strong>Reinvestment all dividends in the same stock: </Strong></td>
+                <td><Strong>*** Reinvestment all dividends in the same stock: </Strong></td>
                 <td th:text="${position.reinvest}"></td>
             </tr>
         </table>
@@ -48,6 +48,12 @@
 
 </body>
 <footer>
+    <hr />
+    <div>
+        <p>** - The percentage of the cash pool to use to reinvest in this position.</p>
+        <p>*** - whether or not reinvest all the stock's dividends back into it. After buying shares, add the
+        remainder to the cash pool</p>
+    </div>
     <div th:replace="fragments :: data-cite"></div>
 </footer>
 </html>

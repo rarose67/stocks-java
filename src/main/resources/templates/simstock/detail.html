@@ -12,13 +12,13 @@
         <div>
             <strong><span th:text="${simStock.getPrice()}"></span></strong>
            <span th:if="${diff > 0}"
-                  th:text="'+' + ${diff}"
+                  th:text="'+' + ${diff} + '*'"
                   style="color:green;"></span>
             <span th:if="${diff < 0}"
-            th:text="${diff}"
+            th:text="${diff} + '*'"
             style="color:red;"></span>
             <span th:if="${diff == 0}"
-                  th:text="${diff}"></span>
+                  th:text="${diff} + '*'"></span>
             <span th:replace="fragments :: price-cite"></span>
         </div>
         <hr>
@@ -48,6 +48,9 @@
 
 </body>
 <footer>
+    <hr />
+    <div> ** - The yearly Dividend includes all dividend types.
+        This program only uses normal and final dividends to simulate future dividends. </div>
     <div th:replace="fragments :: data-cite"></div>
 </footer>
 </html>
