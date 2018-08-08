@@ -30,7 +30,17 @@
         </tr>
     </table>
 
-    <p th:text="${'Cash: ' + portfolio.getCash() + '     Balance: ' + portfolio.getBalance()}"></p>
+    <table class="table">
+        <tr>
+            <th>Cash</th>
+            <th>Balance</th>
+        </tr>
+        <tr>
+            <td th:text="${portfolio.getCash()}"></td>
+            <td th:text="${portfolio.getBalance()}"></td>
+        </tr>
+    </table>
+
     <p th:text="${'# of Years Projected: ' + portfolio.getYears()}"></p>
 </div>
 
@@ -39,8 +49,16 @@
         <a href="/portfolio/edit">Edit Portfolio</a>
     </p>
 
+<hr />
+<form method="post" action="/portfolio/simulate">
+    <input id="portfolioId" type="hidden" name="portfolioId" th:value="${portfolio.id}" />
+    <label for="years"># of Years Projected: </label>
+    <input id="years" type="text" name="years" th:value="${portfolio.years}" />
+    <input type="submit" value="Calculate" />
+</form>
 </body>
 <footer>
+    <hr />
     <div th:replace="fragments :: data-cite"></div>
 </footer>
 </html>

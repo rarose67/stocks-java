@@ -60,12 +60,13 @@ public class Portfolio {
         return positions;
     }
 
-    public double getCash() {
-        return cash;
+    public double getCash()
+    {
+        return SimStock.decimalPlaces(cash,2);
     }
 
     public double getBalance() {
-        return balance;
+        return SimStock.decimalPlaces(balance,2);
     }
 
     public int getYears() {

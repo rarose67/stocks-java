@@ -20,12 +20,6 @@
 
     <input type="submit" value="Edit Portfolio" />
 </form>
-<hr />
-<form method="post" action="/portfolio/simulate">
-    <input id="portfolioId" type="hidden" name="portfolioId" th:value="${portfolio.id}" />
-    <label for="years"># of Years Projected: </label>
-    <input id="years" type="text" name="years" th:value="${portfolio.years}" />
-    <input type="submit" value="Calculate" />
-</form>
+
 </body>
 </html>

@@ -21,7 +21,7 @@
                 <span th:errors="*{symbol}" class="error"></span>
             </div>
             <div class="form-group">
-                <label th:for="shares"># of Shares</label>
+                <label th:for="shares">! # of Shares</label>
                 <input class="form-control" th:field="*{shares}" />
                 <span th:errors="*{shares}" class="error"></span>
             </div>
@@ -44,8 +44,9 @@
     <hr />
     <div>
         <p>** - The percentage of the cash pool to use to reinvest in this position.</p>
-        <p>*** - whether or not reinvest all the stock's dividends back into it. After buying shares, add the
+        <p>*** - Whether or not reinvest all the stock's dividends back into it. After buying shares, add the
             remainder to the cash pool</p>
+        <p>! - To remove a position from your portfolio, set the # of shares to zero.</p>
     </div>
     <div th:replace="fragments :: data-cite"></div>
 </footer>
