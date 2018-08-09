@@ -36,6 +36,10 @@
                 <input class="form-control" type="checkbox" th:field="*{reinvest}" />
                 <span th:errors="*{reinvest}" class="error"></span>
             </div>
+            <div class="form-group">
+                <label th:for="priority">Priority</label>
+                <input class="form-control" id="priority" type="number" th:value="${priority}" name="priority" />
+            </div>
             <input type="submit" value="Create Position" />
         </form>
     </div>

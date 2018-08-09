@@ -33,12 +33,25 @@ public class Portfolio {
     @NotNull
     private int years;
 
+    @Min(value = 0)
+    private double lastCash;
+
+    @NotNull
+    @Min(value = 0)
+    private double lastBalance;
+
+    @NotNull
+    private int lastYears;
+
     @ManyToOne
     private User user;
 
     public Portfolio() {
-        this.balance = 0;
+        this.balance = 0.0;
         this.years = 0;
+        this.lastCash = 0.0;
+        this.lastBalance = 0.0;
+        this.lastYears = 0;
     }
 
     public Portfolio(@NotNull String name, double cash) {
@@ -89,6 +102,30 @@ public class Portfolio {
         this.years = aYears;
     }
 
+    public double getLastCash() {
+        return SimStock.decimalPlaces(lastCash,2);
+    }
+
+    public void setLastCash(double aLastCash) {
+        this.lastCash = aLastCash;
+    }
+
+    public double getLastBalance() {
+        return SimStock.decimalPlaces(lastBalance,2);
+    }
+
+    public void setLastBalance(double aLastBalance) {
+        this.lastBalance = aLastBalance;
+    }
+
+    public int getLastYears() {
+        return lastYears;
+    }
+
+    public void setLastYears(int aLastYears) {
+        this.lastYears = aLastYears;
+    }
+
     public void setPositions(List<Position> aPositions) {
         this.positions = aPositions;
     }
@@ -126,7 +163,20 @@ public class Portfolio {
         }
     }
 
-    public void calculate(int years) {
+    public void calcBalance()
+    {
+        double balance = 0.0;
+
+        for (Position position : positions)
+        {
+            balance += (position.getSimStock().getPrice() * position.getShares());
+        }
+        balance += getCash();
+
+        setBalance(SimStock.decimalPlaces(balance,2));
+    }
+
+    public void calculate(int years, List<Position> orderedPositionList) {
 
         if (this.years > 0)
         {
@@ -143,7 +193,7 @@ public class Portfolio {
 
         while (StockDateField.compare(day, finalDay) <= 0) {
 
-            for (Position position : positions) {
+            for (Position position : orderedPositionList) {
                 SimStock simStock = position.getSimStock();
 
                 if (isMarketOpen(day)) {
@@ -193,7 +243,10 @@ public class Portfolio {
     {
         for (Position position : positions)
         {
-            position.getSimStock().reset();
+            this.lastCash = getCash();
+            this.lastBalance = getBalance();
+            this.lastYears = getYears();
+            position.reset();
         }
     }
 

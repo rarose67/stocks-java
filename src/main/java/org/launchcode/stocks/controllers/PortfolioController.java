@@ -132,6 +132,7 @@ public class PortfolioController {
 
         newPortfolio.setBalance(newPortfolio.getCash());
         newPortfolio.setUser(u);
+        newPortfolio.calcBalance();
         portfolioDao.save(newPortfolio);
 
         return "redirect:";
@@ -204,6 +205,30 @@ public class PortfolioController {
         return "portfolio/view";
     }
 
+    @RequestMapping(value = "viewlast/{portfolioId}", method = RequestMethod.GET)
+    public String viewLastPortfolio(Model model, @PathVariable int portfolioId,
+                                HttpServletRequest request, HttpServletResponse response,
+                                @CookieValue(value = "user", defaultValue = "none") String username) {
+
+        if(username.equals("none")) {
+            return "redirect:/user/login";
+        }
+
+        loadSimPositions(stockData);
+
+        Portfolio portfolio = portfolioDao.findOne(portfolioId);
+
+        if (portfolio != null)
+        {
+            setPortfolioCookie(request, response, portfolioId);
+        }
+
+        model.addAttribute("portfolio", portfolio);
+        model.addAttribute("title", "Portfolio: " + portfolio.getName());
+
+        return "portfolio/viewLast";
+    }
+
     @RequestMapping(value = "add-item/{portfolioId}", method = RequestMethod.GET)
     public String addItem(Model model, @PathVariable int portfolioId,
                           @CookieValue(value = "user", defaultValue = "none") String username) {
@@ -263,6 +288,9 @@ public class PortfolioController {
             positionDao.delete(positionId);
         }
 
+        portfolio.calcBalance();
+        portfolioDao.save(portfolio);
+
         return "redirect:view/"+ portfolio.getId();
     }
 
@@ -308,7 +336,6 @@ public class PortfolioController {
             return "redirect:/portfolio";
         }
 
-
         if (errors.hasErrors()) {
             model.addAttribute("title", "Add portfolio");
 
@@ -342,7 +369,9 @@ public class PortfolioController {
         int pId = Integer.parseInt(portfolioId);
         Portfolio p = portfolioDao.findOne(pId);
 
-        p.calculate(years);
+        List<Position> positionsList = positionDao.findByPortfolio_idOrderByPriorityAsc(pId);
+
+        p.calculate(years, positionsList);
         p.setYears(years);
         portfolioDao.save(p);
         return "redirect:view/" + p.getId();

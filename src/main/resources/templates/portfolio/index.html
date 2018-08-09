@@ -17,6 +17,7 @@
         <th>Cash</th>
         <th>Balance</th>
         <th># of years Projected</th>
+        <th>Previous run</th>
     </tr>
 
     <tr th:each="portfolio : ${portfolios}">
@@ -25,11 +26,13 @@
         <td th:text="${portfolio.cash}"></td>
         <td th:text="${portfolio.balance}"></td>
         <td th:text="${portfolio.years}"></td>
+        <td><a th:href="@{'/portfolio/viewlast/' + ${portfolio.id}}">Previous run</a></td>
     </tr>
 </table>
 
 <hr/>
 <a href="/portfolio/add">Create a portfolio</a>
+<a href="/portfolio/remove">Remove a portfolio</a>
 
 </body>
 <footer>

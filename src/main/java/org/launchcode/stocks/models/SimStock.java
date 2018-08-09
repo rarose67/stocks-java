@@ -212,7 +212,7 @@ public class SimStock {
         this.setWeekStartPrice(getPrice());
     }
 
-    public void reset() {
+    protected void reset() {
 
         StockData stockData = StockData.getInstance();
         Stock stock = stockData.findBySymbol(this.symbol);

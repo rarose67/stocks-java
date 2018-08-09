@@ -23,12 +23,12 @@
         </tr>
 
         <tr th:each="position : ${portfolio.getPositions()}">
-            <td><a th:href="@{'/position/view/' + ${position.id}}" th:text="${position.symbol}"></a></td>
+            <td><a th:href="@{'/position/viewlast/' + ${position.id}}" th:text="${position.symbol}"></a></td>
             <td th:text="${position.getSimStock().name}"></td>
-            <td th:text="${position.shares}"></td>
-            <td th:text="${position.percentage} + '%'"></td>
-            <td th:text="${position.reinvest}"></td>
-            <td th:text="${position.priority}"></td>
+            <td th:text="${position.lastShares}"></td>
+            <td th:text="${position.lastPercentage} + '%'"></td>
+            <td th:text="${position.lastReinvest}"></td>
+            <td th:text="${position.lastPriority}"></td>
         </tr>
     </table>
 
@@ -38,29 +38,19 @@
             <th>Balance</th>
         </tr>
         <tr>
-            <td th:text="${portfolio.getCash()}"></td>
-            <td th:text="${portfolio.getBalance()}"></td>
+            <td th:text="${portfolio.getLastCash()}"></td>
+            <td th:text="${portfolio.getLastBalance()}"></td>
         </tr>
     </table>
 
-    <p th:text="${'# of Years Projected: ' + portfolio.getYears()}"></p>
+    <p th:text="${'# of Years Projected: ' + portfolio.getLastYears()}"></p>
 </div>
 
-    <p>
-        <a th:href="'/portfolio/add-item/' + ${portfolio.id}">Add Position</a>
-        <a href="/portfolio/edit">Edit Portfolio</a>
-    </p>
-    <p>
-        <a href="/portfolio/">Back to Portfolio List</a>
-    </p>
-
 <hr />
-<form method="post" action="/portfolio/simulate">
-    <input id="portfolioId" type="hidden" name="portfolioId" th:value="${portfolio.id}" />
-    <label for="years"># of Years Projected: </label>
-    <input id="years" type="text" name="years" th:value="${portfolio.years}" />
-    <input type="submit" value="Calculate" />
-</form>
+<p>
+    <a href="/portfolio/">Back to Portfolio List</a>
+</p>
+
 </body>
 <footer>
     <hr />

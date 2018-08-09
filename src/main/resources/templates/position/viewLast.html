@@ -10,8 +10,8 @@
     <div>
         <h2 th:text="${simstock.getName() + ' (' + simstock.getSymbol() + ')'}"></h2>
         <div>
-            <strong><span th:text="${simstock.getPrice()} + '*'"></span></strong>
-            <span th:replace="fragments :: price"></span>
+            <strong><span th:text="${position.getLastFinalPrice()} + '*'"></span></strong>
+            <!-- <span th:replace="fragments :: price"></span> -->
         </div>
         <hr />
         <table>
@@ -28,25 +28,25 @@
         <table>
             <tr>
                 <td><Strong># Shares:  </Strong></td>
-                <td th:text="${position.shares}"></td>
+                <td th:text="${position.lastShares}"></td>
             </tr>
             <tr>
                 <td><Strong>** Investment %:  </Strong></td>
-                <td th:text="${position.percentage}"></td>
+                <td th:text="${position.lastPercentage}"></td>
             </tr>
             <tr>
                 <td><Strong>*** Reinvestment all dividends in the same stock: </Strong></td>
-                <td th:text="${position.reinvest}"></td>
+                <td th:text="${position.lastReinvest}"></td>
             </tr>
             <tr>
                 <td><Strong># Priority:  </Strong></td>
-                <td th:text="${position.priority}"></td>
+                <td th:text="${position.lastPriority}"></td>
             </tr>
         </table>
     </div>
     <hr />
     <p>
-        <a th:href="@{'/portfolio/view/' + ${position.getPortfolio().id}}">Back to Portfolio</a>
+        <a th:href="@{'/portfolio/viewlast/' + ${position.getPortfolio().id}}">Back to Portfolio</a>
         <a th:href="@{'/position/edit/' + ${position.id}}">Edit</a>
     </p>
 
@@ -54,7 +54,7 @@
 <footer>
     <hr />
     <div>
-        <p>*   - The last price of the current simulation run.</p>
+        <p>*   - The last price of the previous simulation run.</p>
         <p>**  - The percentage of the cash pool to use to reinvest in this position.</p>
         <p>*** - whether or not reinvest all the stock's dividends back into it. After buying shares, add the
         remainder to the cash pool</p>

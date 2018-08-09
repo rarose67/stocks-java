@@ -34,22 +34,45 @@ public class Position {
     private boolean reinvest;
 
     @NotNull
-    private GregorianCalendar openDate;
+    private int priority;
+
+    @NotNull
+    @Min(0)
+    private int lastShares;
+
+    @Min(0)
+    private double lastFinalPrice;
+
+    @NotNull
+    @Min(0)
+    @Max(100)
+    private int lastPercentage;
+
+    private boolean lastReinvest;
+
+    private int lastPriority;
 
     @ManyToOne
     private Portfolio portfolio;
 
-    public Position() {
-        this.openDate = (GregorianCalendar) GregorianCalendar.getInstance();
+    public Position()
+    {
+        this.lastShares = 0;
+        this.lastPercentage = 0;
+        this.lastReinvest = false;
+        this.lastPriority = 0;
+        this.lastFinalPrice = 0.0;
     }
 
-    public Position(SimStock simStock, int shares, int percentage, boolean reinvest) {
+    public Position(SimStock simStock, int shares, int percentage, boolean reinvest, int priority) {
         this();
         this.symbol = simStock.getSymbol();
         this.simStock = simStock;
         this.shares = shares;
         this.percentage = percentage;
         this.reinvest = reinvest;
+        this.priority = priority;
+        this.lastPriority = this.priority;
     }
 
     public int getId() {
@@ -115,13 +138,52 @@ public class Position {
         this.reinvest = aReinvest;
     }
 
-    @NotNull
-    public GregorianCalendar getOpenDate() {
-        return openDate;
+    public int getPriority() {
+        return priority;
     }
 
-    public void setOpenDate(@NotNull GregorianCalendar openDate) {
-        this.openDate = openDate;
+    public int getLastShares() {
+        return lastShares;
+    }
+
+    public double getLastFinalPrice() {
+        return SimStock.decimalPlaces(lastFinalPrice,2);
+    }
+
+    public int getLastPercentage() {
+        return lastPercentage;
+    }
+
+    public boolean isLastReinvest() {
+        return lastReinvest;
+    }
+
+    public int getLastPriority() {
+        return lastPriority;
+    }
+
+    public void setPriority(int aPriority) {
+        this.priority = aPriority;
+    }
+
+    public void setLastShares(int aLastShares) {
+        this.lastShares = aLastShares;
+    }
+
+    public void setLastFinalPrice(double aLastFinalPrice) {
+        this.lastFinalPrice = aLastFinalPrice;
+    }
+
+    public void setLastPercentage(int aLastPercentage) {
+        this.lastPercentage = aLastPercentage;
+    }
+
+    public void setLastReinvest(boolean aLastReinvest) {
+        this.lastReinvest = aLastReinvest;
+    }
+
+    public void setLastPriority(int aLastPriority) {
+        this.lastPriority = aLastPriority;
     }
 
     /**
@@ -176,5 +238,15 @@ public class Position {
 
         newMoney += SimStock.decimalPlaces((funds - (newShares * simStock.getPrice())), 2);
         return newMoney;
+    }
+
+    protected void reset()
+    {
+        this.lastFinalPrice = getSimStock().getPrice();
+        this.lastShares = this.shares;
+        this.lastPercentage = this.percentage;
+        this.lastReinvest = this.reinvest;
+        this.lastPriority = this.priority;
+        this.getSimStock().reset();
     }
 }

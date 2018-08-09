@@ -48,16 +48,29 @@ public class PositionController {
 
     @RequestMapping(value = "add", method = RequestMethod.GET)
     public String displayAddPositionForm(Model model, @RequestParam String symbol,
+                                         @CookieValue(value = "portfolio", defaultValue = "-1") String portfolioId,
                                          @CookieValue(value = "user", defaultValue = "none") String username) {
 
         if(username.equals("none")) {
             return "redirect:/user/login";
         }
 
+        if(portfolioId.equals("-1")) {
+            return "redirect:/portfolio";
+        }
+
+        int pId = Integer.parseInt(portfolioId);
+        Portfolio p = portfolioDao.findOne(pId);
+
         loadSimPositions(stockData);
         SimStock simStock = simStockData.findBySymbol(symbol);
 
+        int priority = (p.getPositions().size()) + 1;
+
+        System.out.println("\nPriority: " + priority);
+
         model.addAttribute("title", "Add Position");
+        model.addAttribute("priority", priority);
         model.addAttribute("simStock", simStock);
         model.addAttribute(new PositionForm());
         return "position/add";
@@ -65,7 +78,7 @@ public class PositionController {
 
     @RequestMapping(value = "add", method = RequestMethod.POST)
     public String processAddPositionForm(@ModelAttribute @Valid PositionForm newPositionForm,
-                                          Errors errors, Model model,
+                                          Errors errors, Model model, @RequestParam int priority,
                                           @CookieValue(value = "portfolio", defaultValue = "-1") String portfolioId,
                                          @CookieValue(value = "user", defaultValue = "none") String username) {
 
@@ -88,7 +101,11 @@ public class PositionController {
         Portfolio p = portfolioDao.findOne(pId);
 
         if (errors.hasErrors()) {
+            SimStock simStock = simStockData.findBySymbol(newPositionForm.getSymbol());
+
             model.addAttribute("title", "Add Position");
+            model.addAttribute("priority", priority);
+            model.addAttribute("simStock", simStock);
 
             return "position/add";
         }
@@ -97,12 +114,14 @@ public class PositionController {
 
 
         Position newPosition = new Position(stock, newPositionForm.getShares(), newPositionForm.getPercentage(),
-                newPositionForm.isReinvest());
+                newPositionForm.isReinvest(), priority);
 
         newPosition.setPortfolio(p);
 
         positionDao.save(newPosition);
         p.addItem(newPosition);
+        p.calcBalance();
+        portfolioDao.save(p);
         return "redirect:view/" + newPosition.getId();
     }
 
@@ -124,6 +143,26 @@ public class PositionController {
         model.addAttribute("title", "");
 
         return "position/view";
+    }
+
+    @RequestMapping(value = "viewlast/{positionId}", method = RequestMethod.GET)
+    public String viewLastPosition(Model model, @PathVariable int positionId,
+                               @CookieValue(value = "user", defaultValue = "none") String username) {
+
+        if(username.equals("none")) {
+            return "redirect:/user/login";
+        }
+
+        loadSimPositions(stockData);
+
+        Position position = positionDao.findOne(positionId);
+        SimStock simStock = simStockData.findBySymbol(position.getSymbol());
+
+        model.addAttribute("position", position);
+        model.addAttribute("simstock", simStock);
+        model.addAttribute("title", "");
+
+        return "position/viewLast";
     }
 
     @RequestMapping(value = "edit/{positionId}", method = RequestMethod.GET)
@@ -178,11 +217,15 @@ public class PositionController {
 
         if(changedPosition.getShares() > 0) {
             positionDao.save(changedPosition);
+            changedPosition.getPortfolio().calcBalance();
+            portfolioDao.save(changedPosition.getPortfolio());
             return "redirect:/position/view/" + changedPosition.getId();
         }
         else
         {
             positionDao.delete(changedPosition.getId());
+            changedPosition.getPortfolio().calcBalance();
+            portfolioDao.save(changedPosition.getPortfolio());
             return "redirect:/portfolio/view/" + changedPosition.getPortfolio().getId();
         }
     }

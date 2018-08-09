@@ -35,10 +35,19 @@
                 <input class="form-control" type="checkbox" th:field="*{reinvest}" />
                 <span th:errors="*{reinvest}" class="error"></span>
             </div>
+            <div class="form-group">
+                <label th:for="priority">Priority</label>
+                <input class="form-control" th:field="*{priority}" />
+                <span th:errors="*{priority}" class="error"></span>
+            </div>
             <input type="submit" value="Edit Position" />
         </form>
     </div>
-
+<hr />
+<p>
+    <a th:href="@{'/portfolio/view/' + ${position.getPortfolio().id}}">Back to Portfolio</a>
+    <a th:href="@{'/position/view/' + ${position.id}}">Edit</a>
+</p>
 </body>
 <footer>
     <hr />
