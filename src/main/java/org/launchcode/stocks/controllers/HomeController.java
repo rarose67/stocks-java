@@ -1,5 +1,6 @@
 package org.launchcode.stocks.controllers;
 
+import org.launchcode.stocks.models.Position;
 import org.launchcode.stocks.models.SimStock;
 import org.launchcode.stocks.models.Stock;
 import org.launchcode.stocks.models.data.*;
@@ -31,7 +32,19 @@ public class HomeController
 
             for (String symbol : symbols) {
                 stock = stockData.findBySymbol(symbol);
-                simStockData.add(stock);
+                if (stock != null) {
+                    simStockData.add(stock);
+                }
+                else
+                {
+                    List<Position> oldPositionList = positionDao.findBySymbol(symbol);
+
+                    for (Position position : oldPositionList)
+                    {
+                        position.setValid(false);
+                        positionDao.save(position);
+                    }
+                }
             }
         }
     }
@@ -48,7 +61,18 @@ public class HomeController
 
             for (String symbol : symbols) {
                 stock = stockData.findBySymbol(symbol);
-                simStockData.add(stock);
+                if (stock != null) {
+                    simStockData.add(stock);
+                }
+                else
+                {
+                    List<Position> oldPositionList = positionDao.findBySymbol(symbol);
+
+                    for (Position position : oldPositionList)
+                    {
+                        positionDao.delete(position.getId());
+                    }
+                }
             }
         }
     }

@@ -24,6 +24,6 @@ public interface PositionDao extends CrudRepository<Position, Integer> {
 
     public List<Position> findByPortfolio_idOrderByPercentageDesc(int portfolioId);
 
-    public List<Position> findByPortfolio_idOrderByPriorityAsc(int portfolioId);
+    public List<Position> findByPortfolio_idAndValidTrueOrderByPriorityAsc(int portfolioId);
 
 }

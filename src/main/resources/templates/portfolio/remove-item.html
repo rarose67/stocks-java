@@ -11,7 +11,7 @@
 
     <div th:each="position : ${positions}" class="checkbox">
         <input type="checkbox" name="positionIds" th:value="${position.id}" th:id="${position.id}"/>
-        <label th:for="${position.id}" th:text="${position.symbol}"></label>
+        <label th:for="${position.id}" th:text="${position.symbol + ' : ' position.valid}"></label>
         <br />
     </div>
 

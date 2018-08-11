@@ -8,8 +8,7 @@
     <p th:unless="${position}">No simStock found</p>
 
     <div>
-        <h2 th:text="${simstock.getName() + ' (' + simstock.getSymbol() + ')'}"></h2>
-        <h4>(Previous Run)</h4>
+        <h2 th:text="${name + ' (' + position.getSymbol() + ') no longer gives a dividend.'}"></h2>
         <div>
             <strong><span th:text="${position.getLastFinalPrice()} + '*'"></span></strong>
             <!-- <span th:replace="fragments :: price"></span> -->
@@ -17,40 +16,35 @@
         <hr />
         <table>
             <tr>
-                <td><Strong>Next expected Dividend:  </Strong></td>
-                <td th:text="${simstock.getqDividend()}"></td>
-            </tr>
-            <tr>
-                <td><Strong>Next Dividend Date:  </Strong></td>
-                <td th:text="${simstock.showDate()}"></td>
-            </tr>
-        </table>
-        <hr />
-        <table>
-            <tr>
                 <td><Strong># Shares:  </Strong></td>
-                <td th:text="${position.lastShares}"></td>
+                <td th:text="${position.shares}"></td>
             </tr>
             <tr>
                 <td><Strong>** Investment %:  </Strong></td>
-                <td th:text="${position.lastPercentage}"></td>
+                <td th:text="${position.percentage}"></td>
             </tr>
             <tr>
                 <td><Strong>*** Reinvestment all dividends in the same stock: </Strong></td>
-                <td th:text="${position.lastReinvest}"></td>
+                <td th:text="${position.reinvest}"></td>
             </tr>
             <tr>
                 <td><Strong># Priority:  </Strong></td>
-                <td th:text="${position.lastPriority}"></td>
+                <td th:text="${position.priority}"></td>
             </tr>
         </table>
     </div>
-    <hr />
-    <p>
-        <a th:href="@{'/portfolio/viewlast/' + ${position.getPortfolio().id}}">Back to Portfolio</a>
-        <a th:href="@{'/position/edit/' + ${position.id}}">Edit</a>
-    </p>
-
+    <p>Would you like to remove the position from the portfolio?</p>
+    <br />
+    <br />
+    <form method="post" action="/position/remove">
+        <input id="positionId" type="hidden" name="positionId" th:value="${position.getId()}" />
+        <input type="submit" value="Remove Position" />
+    </form>
+<hr />
+<p>
+    <a th:href="@{'/portfolio/view/' + ${position.getPortfolio().id}}">Back to Portfolio</a>
+    <a th:href="@{'/position/view/' + ${position.id}}">Edit</a>
+</p>
 </body>
 <footer>
     <hr />
@@ -58,7 +52,7 @@
         <p>*   - The last price of the previous simulation run.</p>
         <p>**  - The percentage of the cash pool to use to reinvest in this position.</p>
         <p>*** - whether or not reinvest all the stock's dividends back into it. After buying shares, add the
-        remainder to the cash pool</p>
+            remainder to the cash pool</p>
     </div>
     <div th:replace="fragments :: data-cite"></div>
 </footer>

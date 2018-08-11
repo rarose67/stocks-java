@@ -1,6 +1,7 @@
 package org.launchcode.stocks.controllers;
 
 import org.launchcode.stocks.models.Hash;
+import org.launchcode.stocks.models.Position;
 import org.launchcode.stocks.models.Stock;
 import org.launchcode.stocks.models.User;
 import org.launchcode.stocks.models.data.PositionDao;
@@ -81,7 +82,9 @@ public class UserController {
 
             for (String symbol : symbols) {
                 stock = stockData.findBySymbol(symbol);
-                simStockData.add(stock);
+                if (stock != null) {
+                    simStockData.add(stock);
+                }
             }
         }
 

@@ -24,7 +24,8 @@
 
         <tr th:each="position : ${portfolio.getPositions()}">
             <td><a th:href="@{'/position/view/' + ${position.id}}" th:text="${position.symbol}"></a></td>
-            <td th:text="${position.getSimStock().name}"></td>
+            <td th:if="${position.getSimStock() != null}" th:text="${position.getSimStock().name}"></td>
+            <td th:unless="${position.getSimStock() != null}" th:text="${stocks.get(position.symbol)}"></td>
             <td th:text="${position.shares}"></td>
             <td th:text="${position.percentage} + '%'"></td>
             <td th:text="${position.reinvest}"></td>

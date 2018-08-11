@@ -109,7 +109,7 @@ public class SimStock {
     }
 
     public double getVariance() {
-        return variance;
+        return decimalPlaces(variance,2);
     }
 
     public void setVariance(double aVariance) {
@@ -190,7 +190,7 @@ public class SimStock {
     public void trade()
     {
         double start = - (this.getVariance());
-        double range = this.getVariance() *2.0;
+        double range = this.getVariance() * 2.0;
         double change = start + (this.rand.nextDouble() * range);
 
         setPrice(getPrice() + change);

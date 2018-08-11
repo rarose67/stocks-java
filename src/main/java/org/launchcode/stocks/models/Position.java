@@ -37,6 +37,9 @@ public class Position {
     private int priority;
 
     @NotNull
+    private boolean valid;
+
+    @NotNull
     @Min(0)
     private int lastShares;
 
@@ -62,6 +65,7 @@ public class Position {
         this.lastReinvest = false;
         this.lastPriority = 0;
         this.lastFinalPrice = 0.0;
+        this.valid = true;
     }
 
     public Position(SimStock simStock, int shares, int percentage, boolean reinvest, int priority) {
@@ -140,6 +144,14 @@ public class Position {
 
     public int getPriority() {
         return priority;
+    }
+
+    public boolean isValid() {
+        return valid;
+    }
+
+    public void setValid(boolean aValid) {
+        this.valid = aValid;
     }
 
     public int getLastShares() {

@@ -5,6 +5,7 @@
 <body class="container">
 
 <h1 th:text="${title}">Default Title</h1>
+<h4>(Previous Run)</h4>
 
 <nav th:replace="fragments :: navigation"></nav>
 
@@ -24,7 +25,8 @@
 
         <tr th:each="position : ${portfolio.getPositions()}">
             <td><a th:href="@{'/position/viewlast/' + ${position.id}}" th:text="${position.symbol}"></a></td>
-            <td th:text="${position.getSimStock().name}"></td>
+            <td th:if="${position.getSimStock() != null}" th:text="${position.getSimStock().name}"></td>
+            <td th:unless="${position.getSimStock() != null}" th:text="${stocks.get(position.symbol)}"></td>
             <td th:text="${position.lastShares}"></td>
             <td th:text="${position.lastPercentage} + '%'"></td>
             <td th:text="${position.lastReinvest}"></td>

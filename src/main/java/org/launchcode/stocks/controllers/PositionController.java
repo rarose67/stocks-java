@@ -41,7 +41,9 @@ public class PositionController {
 
             for (String symbol : symbols) {
                 stock = stockData.findBySymbol(symbol);
-                simStockData.add(stock);
+                if (stock != null) {
+                    simStockData.add(stock);
+                }
             }
         }
     }
@@ -138,6 +140,15 @@ public class PositionController {
         Position position = positionDao.findOne(positionId);
         SimStock simStock = simStockData.findBySymbol(position.getSymbol());
 
+        if ((position.isValid() == false) || (simStock == null))
+        {
+            model.addAttribute("position", position);
+            model.addAttribute("title", "");
+            model.addAttribute("name", stockData.getAllSymbolsAndNames().get(position.getSymbol()));
+
+            return "position/invalid";
+        }
+
         model.addAttribute("position", position);
         model.addAttribute("simstock", simStock);
         model.addAttribute("title", "");
@@ -157,6 +168,15 @@ public class PositionController {
 
         Position position = positionDao.findOne(positionId);
         SimStock simStock = simStockData.findBySymbol(position.getSymbol());
+
+        if ((position.isValid() == false) || (simStock == null))
+        {
+            model.addAttribute("position", position);
+            model.addAttribute("title", "");
+            model.addAttribute("name", stockData.getAllSymbolsAndNames().get(position.getSymbol()));
+
+            return "position/lastInvalid";
+        }
 
         model.addAttribute("position", position);
         model.addAttribute("simstock", simStock);
@@ -228,5 +248,31 @@ public class PositionController {
             portfolioDao.save(changedPosition.getPortfolio());
             return "redirect:/portfolio/view/" + changedPosition.getPortfolio().getId();
         }
+    }
+
+    @RequestMapping(value = "remove", method = RequestMethod.POST)
+    public String removePosition(@RequestParam int positionId, @CookieValue(value = "user", defaultValue = "none") String username,
+                                        @CookieValue(value = "portfolio", defaultValue = "none") String portfolioId) {
+
+        if (username.equals("none")) {
+            return "redirect:/user/login";
+        }
+
+        if (portfolioId.equals("none")) {
+            return "redirect:/portfolio";
+        }
+
+        Integer pId = Integer.parseInt(portfolioId);
+        Portfolio portfolio = portfolioDao.findOne(pId);
+
+        Position oldPosition = positionDao.findOne(positionId);
+        int oldId = oldPosition.getPortfolio().getId();
+        portfolio.removeItem(oldPosition);
+        positionDao.delete(positionId);
+
+        portfolio.calcBalance();
+        portfolioDao.save(portfolio);
+
+        return "redirect:/portfolio/view/" + oldId;
     }
 }

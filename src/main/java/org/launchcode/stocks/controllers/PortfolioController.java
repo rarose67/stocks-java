@@ -78,7 +78,9 @@ public class PortfolioController {
 
             for (String symbol : symbols) {
                 stock = stockData.findBySymbol(symbol);
-                simStockData.add(stock);
+                if (stock != null) {
+                    simStockData.add(stock);
+                }
             }
         }
     }
@@ -200,6 +202,7 @@ public class PortfolioController {
         }
 
         model.addAttribute("portfolio", portfolio);
+        model.addAttribute("stocks", stockData.getAllSymbolsAndNames());
         model.addAttribute("title", "Portfolio: " + portfolio.getName());
 
         return "portfolio/view";
@@ -224,6 +227,7 @@ public class PortfolioController {
         }
 
         model.addAttribute("portfolio", portfolio);
+        model.addAttribute("stocks", stockData.getAllSymbolsAndNames());
         model.addAttribute("title", "Portfolio: " + portfolio.getName());
 
         return "portfolio/viewLast";
@@ -369,7 +373,7 @@ public class PortfolioController {
         int pId = Integer.parseInt(portfolioId);
         Portfolio p = portfolioDao.findOne(pId);
 
-        List<Position> positionsList = positionDao.findByPortfolio_idOrderByPriorityAsc(pId);
+        List<Position> positionsList = positionDao.findByPortfolio_idAndValidTrueOrderByPriorityAsc(pId);
 
         p.calculate(years, positionsList);
         p.setYears(years);

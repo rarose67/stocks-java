@@ -16,6 +16,10 @@
         <hr />
         <table>
             <tr>
+                <td><Strong>Daily Variance:  </Strong></td>
+                <td th:text="${simstock.getVariance()}"></td>
+            </tr>
+            <tr>
                 <td><Strong>Next expected Dividend:  </Strong></td>
                 <td th:text="${simstock.getqDividend()}"></td>
             </tr>

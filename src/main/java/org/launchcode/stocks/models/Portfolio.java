@@ -169,7 +169,9 @@ public class Portfolio {
 
         for (Position position : positions)
         {
-            balance += (position.getSimStock().getPrice() * position.getShares());
+            if (position.isValid()) {
+                balance += (position.getSimStock().getPrice() * position.getShares());
+            }
         }
         balance += getCash();
 
@@ -180,7 +182,7 @@ public class Portfolio {
 
         if (this.years > 0)
         {
-            reset();
+            reset(orderedPositionList);
         }
 
         GregorianCalendar day = (GregorianCalendar) GregorianCalendar.getInstance();
@@ -197,7 +199,10 @@ public class Portfolio {
                 SimStock simStock = position.getSimStock();
 
                 if (isMarketOpen(day)) {
+                    System.out.println("Before: " + simStock.getSymbol() +" at $" + simStock.getPrice() +
+                            "\tVari: " + simStock.getVariance());
                     simStock.trade();
+                    System.out.println("After: " + simStock.getSymbol() +" at $" + simStock.getPrice());
 
                     if (StockDateField.compare(day, simStock.getNextDividendDate()) >= 0)
                     {
@@ -209,7 +214,7 @@ public class Portfolio {
                     }
                 }
 
-                if (day.get(GregorianCalendar.DAY_OF_WEEK) == GregorianCalendar.SUNDAY) {
+                if ((day.get(GregorianCalendar.DAY_OF_WEEK) == GregorianCalendar.SUNDAY) && (trading_days_this_week > 0)){
                     simStock.adjustWVariance(trading_days_this_week);
                 }
             }
@@ -228,20 +233,12 @@ public class Portfolio {
         System.out.println("\nLast Date: " + (day.get(GregorianCalendar.MONTH)+1) +
                 "/" + day.get(GregorianCalendar.DATE) + "/" + day.get(GregorianCalendar.YEAR));
 
-        double balance = 0.0;
-
-        for (Position position : positions)
-        {
-            balance += (position.getSimStock().getPrice() * position.getShares());
-        }
-        balance += this.cash;
-
-        setBalance(balance);
+        calcBalance();
     }
 
-    public void reset()
+    public void reset(List<Position> validPositionList)
     {
-        for (Position position : positions)
+        for (Position position : validPositionList)
         {
             this.lastCash = getCash();
             this.lastBalance = getBalance();

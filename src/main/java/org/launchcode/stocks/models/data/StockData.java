@@ -9,6 +9,7 @@ public class StockData {
 
     private ArrayList<Stock> stocks = new ArrayList<>();
     private static HashMap<String, String> offeredStocks = new HashMap<>();
+    private static HashMap<String, String> allStocks = new HashMap<>();
     private static StockData instance;
 
     public static double decimalPlaces(double num, int places)
@@ -21,6 +22,10 @@ public class StockData {
 
     public HashMap<String, String> getSymbolsAndNames() {
         return offeredStocks;
+    }
+
+    public HashMap<String, String> getAllSymbolsAndNames() {
+        return allStocks;
     }
 
     private StockData() {

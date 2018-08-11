@@ -124,6 +124,7 @@ public class StockDataImporter {
             symbol = obj.getString("symbol");
             name = obj.getString("name");
             stockData.getSymbolsAndNames().put(symbol, name);
+            stockData.getAllSymbolsAndNames().put(symbol, name);
             symbols.add(symbol);
 
             if ((i+1 >= myResponse.length()) || (((i+1) % 100) == 0))

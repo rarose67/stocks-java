@@ -8,23 +8,12 @@
     <p th:unless="${position}">No simStock found</p>
 
     <div>
-        <h2 th:text="${simstock.getName() + ' (' + simstock.getSymbol() + ')'}"></h2>
+        <h2 th:text="${name + ' (' + position.getSymbol() + ') no longer gives a dividend.'}"></h2>
         <h4>(Previous Run)</h4>
         <div>
             <strong><span th:text="${position.getLastFinalPrice()} + '*'"></span></strong>
             <!-- <span th:replace="fragments :: price"></span> -->
         </div>
-        <hr />
-        <table>
-            <tr>
-                <td><Strong>Next expected Dividend:  </Strong></td>
-                <td th:text="${simstock.getqDividend()}"></td>
-            </tr>
-            <tr>
-                <td><Strong>Next Dividend Date:  </Strong></td>
-                <td th:text="${simstock.showDate()}"></td>
-            </tr>
-        </table>
         <hr />
         <table>
             <tr>
