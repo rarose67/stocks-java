@@ -34,11 +34,12 @@
                 <input class="form-control" th:field="*{percentage}" />
                 <span th:errors="*{percentage}" class="error"></span>
             </div>
-            <div class="form-group checkbox">
+            <div class="form-group">
                 <label th:for="reinvest">*** Reinvest Shares in this Stock</label>
                 <input class="form-control" type="checkbox" th:field="*{reinvest}" />
                 <span th:errors="*{reinvest}" class="error"></span>
             </div>
+            <br />
             <div class="form-group">
                 <label th:for="priority">Priority</label>
                 <input class="form-control" id="priority" type="number" th:value="${priority}" name="priority" />

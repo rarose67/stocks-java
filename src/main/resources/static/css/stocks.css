@@ -41,3 +41,18 @@ ul.form-group li {
     display: inline-block;
     padding-right: 15px;
 }
+
+.checkbox-2 {
+  position: relative;
+  display: inline;
+  margin-top: 0;
+  margin-bottom: 0;
+  vertical-align: middle;
+}
+
+.checkbox-2 label {
+  min-height: 20px;
+  margin-bottom: 0;
+  vertical-align: middle;
+  cursor: pointer;
+}
