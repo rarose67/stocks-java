@@ -1,7 +1,12 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org/">
 <head th:replace="fragments :: head"></head>
-<body class="container">
+<body>
+
+<div th:replace="fragments :: page-header"></div>
+
+<div class="container body-content">
+
 <h1 th:text="${title}">Default Title</h1>
 
 <nav th:replace="fragments :: navigation"></nav>
@@ -27,6 +32,6 @@
 </form>
 
 <span class="error" th:text="${message}"></span>
-
+</div>
 </body>
 </html>

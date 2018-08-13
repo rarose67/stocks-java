@@ -4,10 +4,29 @@
     <meta charset="UTF-8"/>
     <title th:text="${title}">My Stocks</title>
 
-    <!-- <link rel="stylesheet" th:href="@{/css/styles.css}" />
-    <script type="text/javascript" th:src="@{/js/script.js}"></script> -->
+    <!-- Bootstrap stylesheets and script -->
+    <link th:href="@{/css/bootstrap.css}" rel="stylesheet" />
+    <link th:href="@{/css/stocks.css}" rel="stylesheet" />
+    <script type="text/javascript" th:src="@{/js/bootstrap.js}"></script>
 </head>
 <body>
+
+    <div th:fragment="page-header" class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <a th:href="@{/}" class="navbar-brand">Stock Simulator</a>
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li><a th:href="@{/home}">Home</a></li>
+                    <li><a th:href="@{/stock}">Stocks</a></li>
+                    <li><a th:href="@{/portfolio}">Portfolio</a></li>
+                    <li><a th:href="@{/user/login}">Login</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
     <select class="form-control">
         <option th:fragment="compare" th:each="type : ${types}"
                 th:text="${type.getName()}"

@@ -2,12 +2,14 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org/">
 <head th:replace="fragments :: head"></head>
 
-<body class="container">
+<body>
+
+<div th:replace="fragments :: page-header"></div>
+
+<div class="container body-content">
 
 <h1 th:text="${title}">Default Title</h1>
 <h4>(Previous Run)</h4>
-
-<nav th:replace="fragments :: navigation"></nav>
 
 <p th:unless="${portfolio} and ${portfolio.getPositions().size()}">no positions on the portfolio :(</p>
 
@@ -52,7 +54,7 @@
 <p>
     <a href="/portfolio/">Back to Portfolio List</a>
 </p>
-
+</div>
 </body>
 <footer>
     <hr />

@@ -2,7 +2,10 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org/">
 <head th:replace="fragments :: head"></head>
 <body>
-<!-- <nav th:replace="fragments :: navigation"></nav> -->
+
+<div th:replace="fragments :: page-header"></div>
+
+<div class="container body-content">
 
     <h1 th:text="${title}"></h1>
     <p th:unless="${position}">No simStock found</p>
@@ -53,7 +56,7 @@
         <a th:href="@{'/portfolio/view/' + ${position.getPortfolio().id}}">Back to Portfolio</a>
         <a th:href="@{'/position/edit/' + ${position.id}}">Edit</a>
     </p>
-
+</div>
 </body>
 <footer>
     <hr />

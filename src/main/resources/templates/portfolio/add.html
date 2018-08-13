@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org/">
 <head th:replace="fragments :: head"></head>
-<body class="container">
-<h1 th:text="${title}">Default Title</h1>
+<body>
 
-<nav th:replace="fragments :: navigation"></nav>
+<div th:replace="fragments :: page-header"></div>
+
+<div class="container body-content">
+<h1 th:text="${title}">Default Title</h1>
 
 <form method="post" style="max-width:600px;" th:object="${portfolio}">
     <div class="form-group">
@@ -20,6 +22,7 @@
 
     <input type="submit" value="Create Portfolio" />
 </form>
+</div>
 
 </body>
 </html>

@@ -2,7 +2,11 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org/">
 <head th:replace="fragments :: head"></head>
 
-<body class="container">
+<body>
+
+<div th:replace="fragments :: page-header"></div>
+
+<div class="container body-content">
 
 <h1 th:text="${title}">Default Title</h1>
 
@@ -62,6 +66,7 @@
     <input id="years" type="text" name="years" th:value="${portfolio.years}" />
     <input type="submit" value="Calculate" />
 </form>
+</div>
 </body>
 <footer>
     <hr />

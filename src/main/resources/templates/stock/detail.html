@@ -2,7 +2,10 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org/">
 <head th:replace="fragments :: head"></head>
 <body>
-<!-- <nav th:replace="fragments :: navigation"></nav> -->
+
+<div th:replace="fragments :: page-header"></div>
+
+<div class="container body-content">
 
     <h1 th:text="${title}"></h1>
 
@@ -51,6 +54,7 @@
         <input id="symbol" type="hidden" name="symbol" th:value="${stock.getSymbol()}" />
         <input type="submit" value="Create SimStock" />
     </form>
+</div>
 </body>
 <footer>
     <hr />

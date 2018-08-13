@@ -2,7 +2,10 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org/">
 <head th:replace="fragments :: head"></head>
 <body>
-<!-- <nav th:replace="fragments :: navigation"></nav> -->
+
+<div th:replace="fragments :: page-header"></div>
+
+<div class="container body-content">
 
     <h1 th:text="${title}"></h1>
     <p th:unless="${simStock}">No simStock found</p>
@@ -43,7 +46,7 @@
             <input type="submit" value="Create Position" />
         </form>
     </div>
-
+</div>
 </body>
 <footer>
     <hr />

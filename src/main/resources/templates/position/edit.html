@@ -2,7 +2,10 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org/">
 <head th:replace="fragments :: head"></head>
 <body>
-<!-- <nav th:replace="fragments :: navigation"></nav> -->
+
+<div th:replace="fragments :: page-header"></div>
+
+<div class="container body-content">
 
     <h1 th:text="${title}"></h1>
     <p th:unless="${simStock}">No simStock found</p>
@@ -31,10 +34,13 @@
                 <span th:errors="*{percentage}" class="error"></span>
             </div>
             <div class="form-group checkbox">
-                <label th:for="reinvest">*** Reinvest Shares in this Stock</label>
-                <input class="form-control" type="checkbox" th:field="*{reinvest}" />
+                <span>
+                    <label th:for="reinvest">*** Reinvest Shares in this Stock</label>
+                    <input class="form-control" type="checkbox" th:field="*{reinvest}" />
+                </span>
                 <span th:errors="*{reinvest}" class="error"></span>
             </div>
+            <br />
             <div class="form-group">
                 <label th:for="priority">Priority</label>
                 <input class="form-control" th:field="*{priority}" />
@@ -48,6 +54,7 @@
     <a th:href="@{'/portfolio/view/' + ${position.getPortfolio().id}}">Back to Portfolio</a>
     <a th:href="@{'/position/view/' + ${position.id}}">Edit</a>
 </p>
+</div>
 </body>
 <footer>
     <hr />
