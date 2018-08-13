@@ -134,7 +134,6 @@ public class PortfolioController {
 
         newPortfolio.setBalance(newPortfolio.getCash());
         newPortfolio.setUser(u);
-        newPortfolio.calcBalance();
         portfolioDao.save(newPortfolio);
 
         return "redirect:";
