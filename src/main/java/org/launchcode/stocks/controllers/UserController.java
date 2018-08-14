@@ -57,7 +57,7 @@ public class UserController {
             user.setPassword(pswdHash);
             model.addAttribute("user", user);
             userdao.save(user);
-            return "user/login";
+            return "redirect:/user/login";
         } else {
             model.addAttribute("user", user);
             model.addAttribute("title", "User Signup");

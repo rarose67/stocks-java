@@ -34,9 +34,9 @@
                 <input id="percentage" class="form-control" th:field="*{percentage}" />
                 <span th:errors="*{percentage}" class="error"></span>
             </div>
-            <div class="form-group">
+            <div class="form-group checkbox-sm">
                 <label th:for="reinvest">*** Reinvest Shares in this Stock</label>
-                <input id="reinvest" class="form-control" type="checkbox"
+                <input id="reinvest" type="checkbox"
                        onchange="showPercentage()" th:field="*{reinvest}" />
                 <span th:errors="*{reinvest}" class="error"></span>
             </div>
