@@ -8,6 +8,20 @@
     <link th:href="@{/css/bootstrap.css}" rel="stylesheet" />
     <link th:href="@{/css/stocks.css}" rel="stylesheet" />
     <script type="text/javascript" th:src="@{/js/bootstrap.js}"></script>
+    <script>
+        function showPercentage() {
+            var x = document.getElementById("reinvest");
+            if (x.checked)
+            {
+                document.getElementById("percentage").value = 0;
+                document.getElementById("percentage-div").style.display='none';
+            }
+            else
+            {
+                document.getElementById("percentage-div").style.display='block';
+            }
+        }
+    </script>
 </head>
 <body>
 
