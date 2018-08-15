@@ -61,9 +61,24 @@ public class UserController {
         } else {
             model.addAttribute("user", user);
             model.addAttribute("title", "User Signup");
-            if(!user.getPassword().equals(verify)) {
+
+            if(user.getPassword().length() < 6) {
+                model.addAttribute("message", "Password must be a least 6 characters long.");
+            }
+
+            if((!user.getPassword().equals(verify)) && (user.getPassword().length() >= 6))  {
                 model.addAttribute("message", "Passwords must match");
                 user.setPassword("");
+            }
+
+            if((user.getEmail().equals("")) ||
+                    !(user.getEmail().matches("[\\w-]+@[\\w-]+\\.\\w+"))) {
+                model.addAttribute("message", "Please enter a valid Email.");
+            }
+
+            if((user.getUsername().equals("")) ||
+                    !(user.getUsername().matches("[a-zA-Z]{5}[a-zA-Z]*"))) {
+                model.addAttribute("message", "The username must be at least 5 characters, & must be alphabetic");
             }
 
             if(!sameName.isEmpty()) {
