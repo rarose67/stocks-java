@@ -101,9 +101,9 @@ public class PositionController {
 
         int pId = Integer.parseInt(portfolioId);
         Portfolio p = portfolioDao.findOne(pId);
+        SimStock simStock = simStockData.findBySymbol(newPositionForm.getSymbol());
 
         if (errors.hasErrors()) {
-            SimStock simStock = simStockData.findBySymbol(newPositionForm.getSymbol());
 
             model.addAttribute("title", "Add Position");
             model.addAttribute("priority", priority);
@@ -112,10 +112,7 @@ public class PositionController {
             return "position/add";
         }
 
-        SimStock stock = simStockData.findBySymbol(newPositionForm.getSymbol());
-
-
-        Position newPosition = new Position(stock, newPositionForm.getShares(), newPositionForm.getPercentage(),
+        Position newPosition = new Position(simStock, newPositionForm.getShares(), newPositionForm.getPercentage(),
                 newPositionForm.isReinvest(), priority);
 
         newPosition.setPortfolio(p);
@@ -221,15 +218,16 @@ public class PositionController {
             return "redirect:/portfolio";
         }
 
+        Position changedPosition = positionDao.findOne(positionId);
+        SimStock simStock = simStockData.findBySymbol(changedPositionForm.getSymbol());
 
         if (errors.hasErrors()) {
-            model.addAttribute("title", "Add Position");
+            model.addAttribute("position", changedPosition);
+            model.addAttribute("simStock", simStock);
+            model.addAttribute("title", "Edit Position");
 
             return "position/edit";
         }
-
-        Position changedPosition = positionDao.findOne(positionId);
-        SimStock stock = simStockData.findBySymbol(changedPositionForm.getSymbol());
 
         changedPosition.setShares(changedPositionForm.getShares());
         changedPosition.setPercentage(changedPositionForm.getPercentage());

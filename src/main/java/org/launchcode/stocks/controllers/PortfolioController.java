@@ -350,7 +350,6 @@ public class PortfolioController {
 
         changedPortfolio.setName(changedPortfolioForm.getName());
         changedPortfolio.setCash(changedPortfolioForm.getCash());
-        changedPortfolio.setYears(changedPortfolioForm.getYears());
 
         portfolioDao.save(changedPortfolio);
         return "redirect:/portfolio/view/" + changedPortfolio.getId();

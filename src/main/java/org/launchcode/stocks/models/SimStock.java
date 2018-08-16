@@ -199,16 +199,22 @@ public class SimStock {
     public void adjustMVariance(double days)
     {
         double change = getPrice() - getMonthStartPrice();
-        double month1ChangePercent = change / days;
-        setVariance(Math.abs(month1ChangePercent));
+        double month1ChangePerDay = change / days;
+        setVariance(Math.abs(month1ChangePerDay));
         setMonthStartPrice(getPrice());
     }
 
     public void adjustWVariance(double days)
     {
         double change = getPrice() - getWeekStartPrice();
-        double weekChangePercent = change / days;
-        setVariance(Math.abs(weekChangePercent));
+        double weekChangePerDay = change / days;
+        if ((weekChangePerDay >= 0.01) || (weekChangePerDay <= -0.01)) {
+            setVariance(Math.abs(weekChangePerDay));
+        }
+        else
+        {
+            setVariance(Math.abs(change));
+        }
         this.setWeekStartPrice(getPrice());
     }
 

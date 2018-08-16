@@ -487,7 +487,7 @@ public class StockDataImporter {
                 price = mySubObject3.optDouble("open",-1.0);
                 System.out.println("\n" + symbols.get(i) + " : " + price);
             }
-            variance = Math.abs(price * month1ChangePercent);
+            variance = (Math.abs(price * month1ChangePercent) / 30.0);
 
             stock = stockList.get(symbols.get(i));
             stock.setPrice(price);

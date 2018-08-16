@@ -41,10 +41,12 @@
         <tr>
             <th>Cash</th>
             <th>Balance</th>
+            <th>Yearly Income</th>
         </tr>
         <tr>
             <td th:text="${portfolio.getCash()}"></td>
             <td th:text="${portfolio.getBalance()}"></td>
+            <td th:text="${portfolio.getTotalIncome()}"></td>
         </tr>
     </table>
 

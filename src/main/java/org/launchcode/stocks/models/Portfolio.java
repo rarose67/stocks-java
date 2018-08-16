@@ -199,23 +199,25 @@ public class Portfolio {
                 SimStock simStock = position.getSimStock();
 
                 if (isMarketOpen(day)) {
-                    System.out.println("Before: " + simStock.getSymbol() +" at $" + simStock.getPrice() +
-                            "\tVari: " + simStock.getVariance());
                     simStock.trade();
-                    System.out.println("After: " + simStock.getSymbol() +" at $" + simStock.getPrice());
 
                     if (StockDateField.compare(day, simStock.getNextDividendDate()) >= 0)
                     {
                         System.out.println("\n" + position.getSymbol() +
                                 "\nDate: " + (day.get(GregorianCalendar.MONTH)+1) + "/" + day.get(GregorianCalendar.DATE) + "/" + day.get(GregorianCalendar.YEAR) +
-                                "\nDivDate: " + simStock.showDate());
+                                "\nDivDate: " + simStock.showDate() +
+                                "\nCash: $" + getCash());
                         this.cash = position.quarter(this.cash);
+                        System.out.println("You have $" + getCash() + " left to invest");
                         simStock.nextDividendDate();
                     }
                 }
 
                 if ((day.get(GregorianCalendar.DAY_OF_WEEK) == GregorianCalendar.SUNDAY) && (trading_days_this_week > 0)){
+                    System.out.println("Before: " + simStock.getSymbol() +" at $" + simStock.getPrice() +
+                            "\tVari: " + simStock.getVariance());
                     simStock.adjustWVariance(trading_days_this_week);
+                    System.out.println("After: " + simStock.getSymbol() +" at $" + simStock.getPrice());
                 }
             }
 
@@ -245,6 +247,34 @@ public class Portfolio {
             this.lastYears = getYears();
             position.reset();
         }
+    }
+
+    public double getTotalIncome()
+    {
+        double income = 0.0;
+
+        for (Position position : positions)
+        {
+            if (position.isValid()) {
+                income += (position.getSimStock().getDividend() * position.getShares());
+            }
+        }
+
+        return (SimStock.decimalPlaces(income,2));
+    }
+
+    public double getLastTotalIncome()
+    {
+        double income = 0.0;
+
+        for (Position position : positions)
+        {
+            if (position.isValid()) {
+                income += (position.getSimStock().getDividend() * position.getLastShares());
+            }
+        }
+
+        return (SimStock.decimalPlaces(income,2));
     }
 
 }
