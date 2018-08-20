@@ -12,7 +12,7 @@
 
 <p th:unless="${portfolios} and ${portfolios.size()}">No portfolios :(</p>
 
-<table class="table">
+<table class="table" th:if="${portfolios} and ${portfolios.size()}">
 
     <tr>
         <th>Name</th>

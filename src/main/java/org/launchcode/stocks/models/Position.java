@@ -37,6 +37,10 @@ public class Position {
     private int priority;
 
     @NotNull
+    @Enumerated(EnumType.STRING)
+    private PositionState state;
+
+    @NotNull
     private boolean valid;
 
     @NotNull
@@ -65,6 +69,7 @@ public class Position {
         this.lastReinvest = false;
         this.lastPriority = 0;
         this.lastFinalPrice = 0.0;
+        this.state = PositionState.ACTIVE;
         this.valid = true;
     }
 
@@ -198,6 +203,15 @@ public class Position {
         this.lastPriority = aLastPriority;
     }
 
+    @NotNull
+    public PositionState getState() {
+        return state;
+    }
+
+    public void setState(@NotNull PositionState aState) {
+        this.state = aState;
+    }
+
     /**
      * Recalculate the average change in the simStock's price after a given number of days.
      * @param days The
@@ -252,7 +266,7 @@ public class Position {
         return newMoney;
     }
 
-    protected void reset()
+    public void reset()
     {
         this.lastFinalPrice = getSimStock().getPrice();
         this.lastShares = this.shares;

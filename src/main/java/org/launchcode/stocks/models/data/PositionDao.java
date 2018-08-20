@@ -1,6 +1,7 @@
 package org.launchcode.stocks.models.data;
 
 import org.launchcode.stocks.models.Position;
+import org.launchcode.stocks.models.PositionState;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
@@ -22,8 +23,24 @@ public interface PositionDao extends CrudRepository<Position, Integer> {
     @Query("SELECT DISTINCT p.symbol FROM Position p")
     public List<String> findSymbols();
 
-    public List<Position> findByPortfolio_idOrderByPercentageDesc(int portfolioId);
+    /**
+    @Query("SELECT p FROM Position p WHERE p.portfolio_id = :portfolioId AND p.state <> :state ORDER BY p.priority ASC")
+    public List<Position> findByPortfolioAndNotState(@Param("portfolioId") int portfolioId,
+                                                     @Param("state") PositionState state);
 
-    public List<Position> findByPortfolio_idAndValidTrueOrderByPriorityAsc(int portfolioId);
+     */
+
+     @Query(value = "SELECT * FROM POSITION WHERE portfolio_id = :portfolioId AND STATE <> :state ORDER BY PRIORITY ASC",
+     nativeQuery = true)
+     public List<Position> findByPortfolioAndNotState(@Param("portfolioId") int portfolioId,
+     @Param("state") String state);
+
+    @Query(value = "SELECT * FROM POSITION WHERE portfolio_id = :portfolioId AND STATE = :state ORDER BY PRIORITY ASC",
+            nativeQuery = true)
+    public List<Position> findByPortfolioAndState(@Param("portfolioId") int portfolioId,
+                                                  @Param("state") String state);
+
+
+    public List<Position> findByPortfolio_idAndValidTrueAndStateNotOrderByPriorityAsc(int portfolioId, PositionState state);
 
 }

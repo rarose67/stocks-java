@@ -169,7 +169,7 @@ public class Portfolio {
 
         for (Position position : positions)
         {
-            if (position.isValid()) {
+            if (position.isValid() && (position.getState() == PositionState.ACTIVE)) {
                 balance += (position.getSimStock().getPrice() * position.getShares());
             }
         }
@@ -179,11 +179,6 @@ public class Portfolio {
     }
 
     public void calculate(int years, List<Position> orderedPositionList) {
-
-        if (this.years > 0)
-        {
-            reset(orderedPositionList);
-        }
 
         GregorianCalendar day = (GregorianCalendar) GregorianCalendar.getInstance();
         GregorianCalendar finalDay = (GregorianCalendar) GregorianCalendar.getInstance();
@@ -196,28 +191,29 @@ public class Portfolio {
         while (StockDateField.compare(day, finalDay) <= 0) {
 
             for (Position position : orderedPositionList) {
-                SimStock simStock = position.getSimStock();
+                if ((position.getState() == PositionState.ACTIVE)) {
+                    SimStock simStock = position.getSimStock();
 
-                if (isMarketOpen(day)) {
-                    simStock.trade();
+                    if (isMarketOpen(day)) {
+                        simStock.trade();
 
-                    if (StockDateField.compare(day, simStock.getNextDividendDate()) >= 0)
-                    {
-                        System.out.println("\n" + position.getSymbol() +
-                                "\nDate: " + (day.get(GregorianCalendar.MONTH)+1) + "/" + day.get(GregorianCalendar.DATE) + "/" + day.get(GregorianCalendar.YEAR) +
-                                "\nDivDate: " + simStock.showDate() +
-                                "\nCash: $" + getCash());
-                        this.cash = position.quarter(this.cash);
-                        System.out.println("You have $" + getCash() + " left to invest");
-                        simStock.nextDividendDate();
+                        if (StockDateField.compare(day, simStock.getNextDividendDate()) >= 0) {
+                            System.out.println("\n" + position.getSymbol() +
+                                    "\nDate: " + (day.get(GregorianCalendar.MONTH) + 1) + "/" + day.get(GregorianCalendar.DATE) + "/" + day.get(GregorianCalendar.YEAR) +
+                                    "\nDivDate: " + simStock.showDate() +
+                                    "   \nCash: $" + getCash());
+                            this.cash = position.quarter(this.cash);
+                            System.out.println("You have $" + getCash() + " left to invest");
+                            simStock.nextDividendDate();
+                        }
                     }
-                }
 
-                if ((day.get(GregorianCalendar.DAY_OF_WEEK) == GregorianCalendar.SUNDAY) && (trading_days_this_week > 0)){
-                    System.out.println("Before: " + simStock.getSymbol() +" at $" + simStock.getPrice() +
-                            "\tVari: " + simStock.getVariance());
-                    simStock.adjustWVariance(trading_days_this_week);
-                    System.out.println("After: " + simStock.getSymbol() +" at $" + simStock.getPrice());
+                    if ((day.get(GregorianCalendar.DAY_OF_WEEK) == GregorianCalendar.SUNDAY) && (trading_days_this_week > 0)) {
+                        System.out.println("Before: " + simStock.getSymbol() + " at $" + simStock.getPrice() +
+                                "\tVari: " + simStock.getVariance());
+                        simStock.adjustWVariance(trading_days_this_week);
+                        System.out.println("After: " + simStock.getSymbol() + " at $" + simStock.getPrice());
+                    }
                 }
             }
 
@@ -238,16 +234,7 @@ public class Portfolio {
         calcBalance();
     }
 
-    public void reset(List<Position> validPositionList)
-    {
-        for (Position position : validPositionList)
-        {
-            this.lastCash = getCash();
-            this.lastBalance = getBalance();
-            this.lastYears = getYears();
-            position.reset();
-        }
-    }
+
 
     public double getTotalIncome()
     {

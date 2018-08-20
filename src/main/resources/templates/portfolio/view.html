@@ -26,7 +26,7 @@
             <th>Priority</th>
         </tr>
 
-        <tr th:each="position : ${portfolio.getPositions()}">
+        <tr th:each="position : ${visablePositions}">
             <td><a th:href="@{'/position/view/' + ${position.id}}" th:text="${position.symbol}"></a></td>
             <td th:if="${position.getSimStock() != null}" th:text="${position.getSimStock().name}"></td>
             <td th:unless="${position.getSimStock() != null}" th:text="${stocks.get(position.symbol)}"></td>

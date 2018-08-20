@@ -48,6 +48,25 @@ public class PositionController {
         }
     }
 
+    private void deletePosition(Position oldPosition)
+    {
+        if (oldPosition.getState() == PositionState.ACTIVE)
+        {
+            oldPosition.setState(PositionState.INACTIVE);
+            positionDao.save(oldPosition);
+        }
+        else if (oldPosition.getState() == PositionState.INACTIVE)
+        {
+            oldPosition.setState(PositionState.DELETED);
+            positionDao.save(oldPosition);
+        }
+        else if (oldPosition.getState() == PositionState.DELETED) {
+            Portfolio portfolio = oldPosition.getPortfolio();
+            portfolio.removeItem(oldPosition);
+            positionDao.delete(oldPosition.getId());
+        }
+    }
+
     @RequestMapping(value = "add", method = RequestMethod.GET)
     public String displayAddPositionForm(Model model, @RequestParam String symbol,
                                          @CookieValue(value = "portfolio", defaultValue = "-1") String portfolioId,
@@ -229,11 +248,12 @@ public class PositionController {
             return "position/edit";
         }
 
-        changedPosition.setShares(changedPositionForm.getShares());
+
         changedPosition.setPercentage(changedPositionForm.getPercentage());
         changedPosition.setReinvest(changedPositionForm.isReinvest());
+        changedPosition.setShares(changedPositionForm.getShares());
 
-        if(changedPosition.getShares() > 0) {
+        if(changedPositionForm.getShares() > 0) {
             positionDao.save(changedPosition);
             changedPosition.getPortfolio().calcBalance();
             portfolioDao.save(changedPosition.getPortfolio());
@@ -241,7 +261,7 @@ public class PositionController {
         }
         else
         {
-            positionDao.delete(changedPosition.getId());
+            deletePosition(changedPosition);
             changedPosition.getPortfolio().calcBalance();
             portfolioDao.save(changedPosition.getPortfolio());
             return "redirect:/portfolio/view/" + changedPosition.getPortfolio().getId();
@@ -265,8 +285,8 @@ public class PositionController {
 
         Position oldPosition = positionDao.findOne(positionId);
         int oldId = oldPosition.getPortfolio().getId();
-        portfolio.removeItem(oldPosition);
-        positionDao.delete(positionId);
+
+        deletePosition(oldPosition);
 
         portfolio.calcBalance();
         portfolioDao.save(portfolio);
