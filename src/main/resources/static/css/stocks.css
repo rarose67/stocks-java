@@ -41,3 +41,14 @@ ul.form-group li {
     display: inline-block;
     padding-right: 15px;
 }
+
+.link-right
+{
+    float: right;
+}
+
+.text-center
+{
+    text-align:center;
+}
+

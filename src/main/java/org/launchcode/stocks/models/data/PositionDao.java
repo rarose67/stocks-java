@@ -23,23 +23,13 @@ public interface PositionDao extends CrudRepository<Position, Integer> {
     @Query("SELECT DISTINCT p.symbol FROM Position p")
     public List<String> findSymbols();
 
-    /**
-    @Query("SELECT p FROM Position p WHERE p.portfolio_id = :portfolioId AND p.state <> :state ORDER BY p.priority ASC")
-    public List<Position> findByPortfolioAndNotState(@Param("portfolioId") int portfolioId,
-                                                     @Param("state") PositionState state);
-
-     */
-
-     @Query(value = "SELECT * FROM POSITION WHERE portfolio_id = :portfolioId AND STATE <> :state ORDER BY PRIORITY ASC",
-     nativeQuery = true)
-     public List<Position> findByPortfolioAndNotState(@Param("portfolioId") int portfolioId,
-     @Param("state") String state);
-
-    @Query(value = "SELECT * FROM POSITION WHERE portfolio_id = :portfolioId AND STATE = :state ORDER BY PRIORITY ASC",
+    @Query(value = "SELECT * FROM POSITION WHERE portfolio_id = :portfolioId AND STATE = 'NEW' OR STATE = 'ACTIVE' ORDER BY PRIORITY ASC",
             nativeQuery = true)
-    public List<Position> findByPortfolioAndState(@Param("portfolioId") int portfolioId,
-                                                  @Param("state") String state);
+    public List<Position> findCurrent(@Param("portfolioId") int portfolioId);
 
+    @Query(value = "SELECT * FROM POSITION WHERE portfolio_id = :portfolioId AND STATE = 'ACTIVE' OR STATE = 'INACTIVE' ORDER BY PRIORITY ASC",
+            nativeQuery = true)
+    public List<Position> findLast(@Param("portfolioId") int portfolioId);
 
     public List<Position> findByPortfolio_idAndValidTrueAndStateNotOrderByPriorityAsc(int portfolioId, PositionState state);
 

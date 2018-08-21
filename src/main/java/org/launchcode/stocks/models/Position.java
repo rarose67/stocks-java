@@ -69,7 +69,7 @@ public class Position {
         this.lastReinvest = false;
         this.lastPriority = 0;
         this.lastFinalPrice = 0.0;
-        this.state = PositionState.ACTIVE;
+        this.state = PositionState.NEW;
         this.valid = true;
     }
 

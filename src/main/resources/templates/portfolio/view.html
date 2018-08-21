@@ -56,6 +56,7 @@
     <p>
         <a th:href="'/portfolio/add-item/' + ${portfolio.id}">Add Position</a>
         <a href="/portfolio/edit">Edit Portfolio</a>
+        <a class="link-right" th:href="@{'/portfolio/viewlast/' + ${portfolio.id}}">Previous run</a>
     </p>
     <p>
         <a href="/portfolio/">Back to Portfolio List</a>

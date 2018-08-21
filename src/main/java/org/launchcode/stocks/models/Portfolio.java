@@ -169,7 +169,8 @@ public class Portfolio {
 
         for (Position position : positions)
         {
-            if (position.isValid() && (position.getState() == PositionState.ACTIVE)) {
+            if (position.isValid() &&
+                    ((position.getState() == PositionState.NEW) || (position.getState() == PositionState.ACTIVE))) {
                 balance += (position.getSimStock().getPrice() * position.getShares());
             }
         }
@@ -191,7 +192,8 @@ public class Portfolio {
         while (StockDateField.compare(day, finalDay) <= 0) {
 
             for (Position position : orderedPositionList) {
-                if ((position.getState() == PositionState.ACTIVE)) {
+                if (((position.getState() == PositionState.NEW)) || ((position.getState() == PositionState.ACTIVE)))
+                {
                     SimStock simStock = position.getSimStock();
 
                     if (isMarketOpen(day)) {
@@ -209,10 +211,10 @@ public class Portfolio {
                     }
 
                     if ((day.get(GregorianCalendar.DAY_OF_WEEK) == GregorianCalendar.SUNDAY) && (trading_days_this_week > 0)) {
-                        System.out.println("Before: " + simStock.getSymbol() + " at $" + simStock.getPrice() +
-                                "\tVari: " + simStock.getVariance());
+                        //System.out.println("Before: " + simStock.getSymbol() + " at $" + simStock.getPrice() +
+                          //      "\tVari: " + simStock.getVariance());
                         simStock.adjustWVariance(trading_days_this_week);
-                        System.out.println("After: " + simStock.getSymbol() + " at $" + simStock.getPrice());
+                        //System.out.println("After: " + simStock.getSymbol() + " at $" + simStock.getPrice());
                     }
                 }
             }
@@ -264,5 +266,19 @@ public class Portfolio {
         return (SimStock.decimalPlaces(income,2));
     }
 
+    public void reset()
+    {
+        this.setLastCash(this.getCash());
+        this.setLastBalance(this.getBalance());
+        this.setLastYears(this.getYears());
+
+        for (Position position : this.getPositions())
+        {
+            if (position.isValid() && (position.getState() == PositionState.ACTIVE))
+            {
+                position.reset();
+            }
+        }
+    }
 }
 

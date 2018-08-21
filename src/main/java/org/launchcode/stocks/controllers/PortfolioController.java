@@ -100,23 +100,17 @@ public class PortfolioController {
         }
     }
 
-    public void reset(Portfolio portfolio)
+    private void changeState(Portfolio portfolio)
     {
-        portfolio.setLastCash(portfolio.getCash());
-        portfolio.setLastBalance(portfolio.getBalance());
-        portfolio.setLastYears(portfolio.getYears());
+        for (Position position : portfolio.getPositions()) {
+            if ((position.getState() == PositionState.NEW)) {
+                position.setState(PositionState.ACTIVE);
+                positionDao.save(position);
 
-        for (Position position : portfolio.getPositions())
-        {
-            if ((position.getState() != PositionState.ACTIVE))
-            {
+            } else if ((position.getState() != PositionState.ACTIVE)) {
                 position.setState(PositionState.DELETED);
                 positionDao.save(position);
 
-            }
-            else if (position.isValid() && (position.getState() == PositionState.ACTIVE))
-            {
-                position.reset();
             }
         }
     }
@@ -236,8 +230,7 @@ public class PortfolioController {
             setPortfolioCookie(request, response, portfolioId);
         }
 
-        List<Position> positionsList = positionDao.findByPortfolioAndState(portfolio.getId(),
-                PositionState.ACTIVE.getName());
+        List<Position> positionsList = positionDao.findCurrent(portfolio.getId());
 
         model.addAttribute("portfolio", portfolio);
         model.addAttribute("visablePositions", positionsList);
@@ -265,8 +258,7 @@ public class PortfolioController {
             setPortfolioCookie(request, response, portfolioId);
         }
 
-        List<Position> positionsList = positionDao.findByPortfolioAndNotState(portfolio.getId(),
-                PositionState.DELETED.getName());
+        List<Position> positionsList = positionDao.findLast(portfolio.getId());
 
         model.addAttribute("portfolio", portfolio);
         model.addAttribute("visablePositions", positionsList);
@@ -416,16 +408,23 @@ public class PortfolioController {
         int pId = Integer.parseInt(portfolioId);
         Portfolio p = portfolioDao.findOne(pId);
 
-        if (p.getYears() > 0)
-        {
-            reset(p);
-        }
+        //if(years > 0) {
+          //  changeState(p);
+            if (p.getYears() > 0) {
+                p.reset();
+            }
+        //}
 
        // List<Position> positionsList =  positionDao.findValidByPortfolioAndNotState(p.getId(), PositionState.DELETED);
         List<Position> positionsList =  positionDao.findByPortfolio_idAndValidTrueAndStateNotOrderByPriorityAsc(p.getId(),
                 PositionState.DELETED);
 
         p.calculate(years, positionsList);
+
+        if(years > 0) {
+            changeState(p);
+        }
+
         p.setYears(years);
 
         clearDeleted(p);

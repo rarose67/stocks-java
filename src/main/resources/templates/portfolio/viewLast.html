@@ -54,7 +54,8 @@
 
 <hr />
 <p>
-    <a href="/portfolio/">Back to Portfolio List</a>
+    <a th:href="@{'/portfolio/view/' + ${portfolio.id}}">Current Run</a>
+    <a class="link-right" href="/portfolio/">Back to Portfolio List</a>
 </p>
 </div>
 </body>
