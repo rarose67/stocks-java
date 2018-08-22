@@ -266,13 +266,18 @@ public class Position {
         return newMoney;
     }
 
-    public void reset()
+    protected void updateLast()
     {
         this.lastFinalPrice = getSimStock().getPrice();
         this.lastShares = this.shares;
         this.lastPercentage = this.percentage;
         this.lastReinvest = this.reinvest;
         this.lastPriority = this.priority;
+    }
+
+    public void reset()
+    {
+        this.updateLast();
         this.getSimStock().reset();
     }
 }

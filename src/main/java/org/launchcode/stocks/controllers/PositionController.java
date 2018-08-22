@@ -251,9 +251,9 @@ public class PositionController {
 
         changedPosition.setPercentage(changedPositionForm.getPercentage());
         changedPosition.setReinvest(changedPositionForm.isReinvest());
-        changedPosition.setShares(changedPositionForm.getShares());
 
         if(changedPositionForm.getShares() > 0) {
+            changedPosition.setShares(changedPositionForm.getShares());
             positionDao.save(changedPosition);
             changedPosition.getPortfolio().calcBalance();
             portfolioDao.save(changedPosition.getPortfolio());
@@ -261,6 +261,7 @@ public class PositionController {
         }
         else
         {
+            changedPosition.getPortfolio().resetAfterDel();
             deletePosition(changedPosition);
             changedPosition.getPortfolio().calcBalance();
             portfolioDao.save(changedPosition.getPortfolio());

@@ -280,5 +280,20 @@ public class Portfolio {
             }
         }
     }
+
+    public void resetAfterDel()
+    {
+        this.setLastCash(this.getCash());
+        this.setLastBalance(this.getBalance());
+        this.setLastYears(this.getYears());
+
+        for (Position position : this.getPositions())
+        {
+            if (position.isValid() && (position.getState() == PositionState.ACTIVE))
+            {
+                position.updateLast();
+            }
+        }
+    }
 }
 
