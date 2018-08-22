@@ -36,6 +36,7 @@ public class PortfolioController {
             for (Cookie c : cookies) {
                 if (c.getName().equals("portfolio"))
                 {
+                    System.out.println("Cookie to be removed: " + c.getName() + " : " + c.getValue());
                     c.setMaxAge(0);
                     c.setPath("/");
                     response.addCookie(c);
@@ -62,6 +63,7 @@ public class PortfolioController {
         Integer pId = portfolioId;
         String portfolioIdString = pId.toString();
         Cookie c = new Cookie("portfolio", portfolioIdString);
+        System.out.println("\nCookie added: " + c.getName() + " : " + c.getValue());
         c.setPath("/");
         response.addCookie(c);
     }

@@ -23,11 +23,11 @@ public interface PositionDao extends CrudRepository<Position, Integer> {
     @Query("SELECT DISTINCT p.symbol FROM Position p")
     public List<String> findSymbols();
 
-    @Query(value = "SELECT * FROM POSITION WHERE portfolio_id = :portfolioId AND STATE = 'NEW' OR STATE = 'ACTIVE' ORDER BY PRIORITY ASC",
+    @Query(value = "SELECT * FROM POSITION WHERE portfolio_id = :portfolioId AND (STATE = 'NEW' OR STATE = 'ACTIVE') ORDER BY PRIORITY ASC",
             nativeQuery = true)
     public List<Position> findCurrent(@Param("portfolioId") int portfolioId);
 
-    @Query(value = "SELECT * FROM POSITION WHERE portfolio_id = :portfolioId AND STATE = 'ACTIVE' OR STATE = 'INACTIVE' ORDER BY PRIORITY ASC",
+    @Query(value = "SELECT * FROM POSITION WHERE portfolio_id = :portfolioId AND (STATE = 'ACTIVE' OR STATE = 'INACTIVE') ORDER BY PRIORITY ASC",
             nativeQuery = true)
     public List<Position> findLast(@Param("portfolioId") int portfolioId);
 
