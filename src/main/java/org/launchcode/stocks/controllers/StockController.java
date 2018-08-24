@@ -36,33 +36,15 @@ public class StockController {
         return "stock/index";
     }
 
-    /**
-    @RequestMapping(value = "add")  //set Route for home page
-    public String displayAddForm(Model model)
-    {
-        String title ="Add stock";
-        model.addAttribute("title", title);
-        return "add";
-    }
-
-
-    @RequestMapping(value = "detail")  //set Route for home page
-    public String processAddForm(Model model, @RequestParam String symbol)
-    {
-        String title ="Stock";
-        model.addAttribute("title", title);
-
-        Stock stock = stockData.findBySymbol(symbol);
-        double diff = (stock.getPrice() - stock.getWeekStartPrice());
-        diff = Math.floor((diff*100.0)+0.5)/100.00;
-        model.addAttribute("stock", stock);
-        model.addAttribute("diff", diff);
-        return "stock/detail";
-    } */
-
     @RequestMapping(value = "detail", method = RequestMethod.GET)  //set Route for home page
-    public String detail(Model model, @RequestParam String symbol)
+    public String detail(Model model, @RequestParam String symbol,
+                         @CookieValue(value = "user", defaultValue = "none") String username)
     {
+        boolean loggedIn = true;
+        if(username.equals("none")) {
+            loggedIn = false;
+        }
+
         String title ="Stock";
         model.addAttribute("title", title);
 
@@ -74,6 +56,7 @@ public class StockController {
         double diff = (stock.getPrice() - stock.getWeekStartPrice());
         diff = Math.floor((diff*100.0)+0.5)/100.00;
         model.addAttribute("stock", stock);
+        model.addAttribute("user", loggedIn);
         model.addAttribute("diff", diff);
         return "stock/detail";
     }
@@ -91,7 +74,8 @@ public class StockController {
 
     @RequestMapping(value = "search/results", method = RequestMethod.POST)
     public String processSearchForm(@ModelAttribute @Valid SearchForm newsearch,
-                                    Errors errors, Model model)
+                                    Errors errors, Model model,
+                                    @CookieValue(value = "user", defaultValue = "none") String username)
     {
         if (errors.hasErrors()) {
             StockCompareType[] types = StockCompareType.values();
@@ -99,6 +83,11 @@ public class StockController {
             model.addAttribute("title", "Search for Stocks");
 
             return "stock/search";
+        }
+
+        boolean loggedIn = true;
+        if(username.equals("none")) {
+            loggedIn = false;
         }
 
         ArrayList<StockField> fields = new ArrayList<>();
@@ -154,6 +143,7 @@ public class StockController {
                 double diff = (stock.getPrice() - stock.getWeekStartPrice());
                 diff = Math.floor((diff*100.0)+0.5)/100.00;
                 model.addAttribute("diff", diff);
+                model.addAttribute("user", loggedIn);
 
                 return "stock/detail";
             }
@@ -167,6 +157,7 @@ public class StockController {
                 double diff = (stock.getPrice() - stock.getWeekStartPrice());
                 diff = Math.floor((diff*100.0)+0.5)/100.00;
                 model.addAttribute("diff", diff);
+                model.addAttribute("user", loggedIn);
 
                 return "stock/detail";
             }
