@@ -22,6 +22,10 @@ public class HomeController
 
     private StockData stockData = StockData.getInstance();
 
+    /**
+     *
+     * @param stockData
+     */
     public void loadSimPositions(StockData stockData)
     {
          SimStockData simStockData = SimStockData.getInstance();

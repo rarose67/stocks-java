@@ -34,6 +34,9 @@ public class Position {
     private boolean reinvest;
 
     @NotNull
+    private double totalDividends;
+
+    @NotNull
     private int priority;
 
     @NotNull
@@ -70,6 +73,7 @@ public class Position {
         this.lastPriority = 0;
         this.lastFinalPrice = 0.0;
         this.state = PositionState.NEW;
+        this.totalDividends = 0.0;
         this.valid = true;
     }
 
@@ -175,6 +179,14 @@ public class Position {
         return lastReinvest;
     }
 
+    public double getTotalDividends() {
+        return totalDividends;
+    }
+
+    public void setTotalDividends(double aTotalDividends) {
+        this.totalDividends = aTotalDividends;
+    }
+
     public int getLastPriority() {
         return lastPriority;
     }
@@ -243,18 +255,22 @@ public class Position {
     {
         double funds;
         double dividend = SimStock.decimalPlaces(((this.getSimStock().getqDividend()) * this.getShares()), 2);
-        double newMoney = SimStock.decimalPlaces((money + dividend), 2);
+        double newMoney;
 
         if (this.isReinvest() == false)
         {
+            newMoney = SimStock.decimalPlaces((money + dividend), 2);
             funds = newMoney * (this.getPercentage() / 100.0);
+            newMoney -= funds;
         }
         else
         {
-            funds = dividend;
+            totalDividends += dividend;
+            funds = totalDividends;
+            newMoney = money;
         }
 
-        newMoney -= funds;
+
         System.out.println("\nYou have " + this.getShares() + " shares of " + this.getSymbol());
 
         int newShares = (int) (Math.floor(funds / simStock.getPrice()));
@@ -262,7 +278,15 @@ public class Position {
         System.out.println("Bought " + newShares + " shares of " + this.getSymbol() +" at $"
                 + simStock.getPrice() + " and now have " + this.getShares() + " shares.");
 
-        newMoney += SimStock.decimalPlaces((funds - (newShares * simStock.getPrice())), 2);
+        if (this.isReinvest() == false)
+        {
+            newMoney += SimStock.decimalPlaces((funds - (newShares * simStock.getPrice())), 2);
+        }
+        else
+        {
+            totalDividends = SimStock.decimalPlaces((funds - (newShares * simStock.getPrice())), 2);
+        }
+
         return newMoney;
     }
 

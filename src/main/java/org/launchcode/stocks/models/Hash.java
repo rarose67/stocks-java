@@ -6,6 +6,10 @@ import java.util.Random;
 
 public abstract class Hash {
 
+    /**
+     * This function creates a salt to further encrypt passwords.
+     * @return
+     */
     private static String makeSalt()
     {
         Random rand = new Random();

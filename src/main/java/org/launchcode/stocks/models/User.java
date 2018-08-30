@@ -8,6 +8,9 @@ import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.util.List;
 
+/**
+ * This class defines the user object which contains information about registered users.
+ */
 @Entity
 public class User {
 

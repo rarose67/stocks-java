@@ -5,12 +5,19 @@ import org.launchcode.stocks.models.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+/**
+ * This class provides methods and structures to access the simulated stocks used for projection calculation.
+ */
 public class SimStockData {
 
     private ArrayList<SimStock> simStocks = new ArrayList<>();
     private static HashMap<String, String> symbolsAndNames = new HashMap<>();
     private static SimStockData instance;
 
+    /**
+     * Returns a hashmap which relates a simulated stock's symbol to it's name.
+     * @return
+     */
     public HashMap<String, String> getSymbolsAndNames() {
         return symbolsAndNames;
     }
@@ -19,6 +26,10 @@ public class SimStockData {
 
     }
 
+    /**
+     * Creates an instance of the SimStockdata class if one doesn't already exsit.
+     * @return - A reference to the instance
+     */
     public static SimStockData getInstance() {
         if (instance == null) {
             instance = new SimStockData();
@@ -26,6 +37,11 @@ public class SimStockData {
         return instance;
     }
 
+    /**
+     * Add a SimStock to the list of stocks
+     * @param stock - The SimStock to add
+     * @return - A reference to the SimStock
+     */
     public SimStock add(Stock stock)
     {
         if (!(symbolsAndNames.containsKey(stock.getSymbol()))) {
@@ -42,6 +58,11 @@ public class SimStockData {
 
     }
 
+    /**
+     * Find a SimStock by id
+     * @param id - The id of the SimStock
+     * @return - A reference to the SimStock or null
+     */
     public SimStock findById(int id) {
         for (SimStock stock : simStocks) {
             if (stock.getId() == id)
@@ -51,6 +72,11 @@ public class SimStockData {
         return null;
     }
 
+    /**
+     * Find a SimStock by stock symbol
+     * @param symbol - The symbol of the SimStock
+     * @return - A reference to the SimStock or null
+     */
     public SimStock findBySymbol(String symbol) {
         for (SimStock stock : simStocks) {
             if (stock.getSymbol().equals(symbol))
@@ -60,6 +86,11 @@ public class SimStockData {
         return null;
     }
 
+    /**
+     * Find a SimStock by name
+     * @param name - The name of the SimStock
+     * @return - A reference to the SimStock or null
+     */
     public SimStock findByName(String name) {
         for (SimStock stock : simStocks) {
             if (stock.getName().equals(name))
@@ -69,11 +100,19 @@ public class SimStockData {
         return null;
     }
 
+    /**
+     * Find All SimStocks.
+     * @return - A List of SimStock objects.
+     */
     public ArrayList<SimStock> findAll() {
         return simStocks;
     }
 
-
+    /**
+     * Find all SimStocks that match given criteria.
+     * @param stockFields - A List of StockField objects that contain the field names and values to search for.
+     * @return - A list of Simstock objects that match given criteria.
+     */
     public ArrayList<SimStock> findByColumnAndValue(ArrayList<StockField> stockFields)
     {
         ArrayList<SimStock> matchedStocks = new ArrayList<>(simStocks);
@@ -100,6 +139,12 @@ public class SimStockData {
         return matchedStocks;
     }
 
+    /**
+     * This function determines whether a SimStock matches a search criteria.
+     * @param stock - The stock to check
+     * @param field - The criteria to check against
+     * @return - whether there's a match
+     */
     private boolean findMatch(SimStock stock, StockField field)
     {
         boolean match = false;

@@ -7,6 +7,9 @@ import javax.validation.constraints.Size;
 import java.util.GregorianCalendar;
 import java.util.List;
 
+/**
+ * This class defines the portfolio object which contains information about a portfolio .
+ */
 @Entity
 public class Portfolio {
 
@@ -22,30 +25,39 @@ public class Portfolio {
     @JoinColumn(name = "portfolio_id")
     private List<Position> positions;
 
+    //The amount of money used to reinvest in stocks.
     @NotNull
     @Min(value = 0)
     private double cash;
 
+    //The overall value af a portfolio
     @NotNull
     @Min(value = 0)
     private double balance;
 
+    //The # of years for the latest projection of the portfolio
     @NotNull
     private int years;
 
+    //The amount of money used to reinvest in stocks after the previous run.
     @Min(value = 0)
     private double lastCash;
 
+    //The overall value af a portfolio after the previous run.
     @NotNull
     @Min(value = 0)
     private double lastBalance;
 
+    //The # of years for the previous projection of the portfolio
     @NotNull
     private int lastYears;
 
     @ManyToOne
     private User user;
 
+    /**
+     * This function creates a portfolio object with default values.
+     */
     public Portfolio() {
         this.balance = 0.0;
         this.years = 0;
@@ -54,6 +66,11 @@ public class Portfolio {
         this.lastYears = 0;
     }
 
+    /**
+     * This function creates a portfolio object.
+     * @param name - The name of the portfolio.
+     * @param cash - The amount of money used to reinvest in stocks.
+     */
     public Portfolio(@NotNull String name, double cash) {
         this();
         this.name = name;
@@ -61,6 +78,10 @@ public class Portfolio {
         this.balance = cash;
     }
 
+    /**
+     *
+     * @return - The portfolio id
+     */
     public int getId() {
         return id;
     }

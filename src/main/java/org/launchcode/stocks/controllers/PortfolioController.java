@@ -29,6 +29,11 @@ public class PortfolioController {
     @Autowired
     private PositionDao positionDao;
 
+    /**
+     * Delete the portfolio cookie
+      * @param request
+     * @param response
+     */
     private void clearPortfolioCookie(HttpServletRequest request, HttpServletResponse response) {
         Cookie[] cookies = request.getCookies();
 
@@ -46,6 +51,12 @@ public class PortfolioController {
         }
     }
 
+    /**
+     * Set a cookie that contains the id of the portfolio currently being accessed.
+     * @param request
+     * @param response
+     * @param portfolioId - the portfolio id
+     */
     private void setPortfolioCookie(HttpServletRequest request, HttpServletResponse response, int portfolioId) {
 
         Cookie[] cookies = request.getCookies();
@@ -72,6 +83,10 @@ public class PortfolioController {
 
     private SimStockData simStockData = SimStockData.getInstance();
 
+    /**
+     * This function create SimStock for all the positions in the database if they don't already exist.
+     * @param stockData - A stockdata object used to access the data layer.
+     */
     public void loadSimPositions(StockData stockData)
     {
         if (simStockData.findAll().isEmpty()) {
@@ -87,6 +102,10 @@ public class PortfolioController {
         }
     }
 
+    /**
+     * Deletes the positions marked with 'deleted' status from the database.
+     * @param portfolio - The portfolio with the positions to be deleted
+     */
     private void clearDeleted(Portfolio portfolio)
     {
         ArrayList<Position> oldPositions = new ArrayList<>(portfolio.getPositions());
@@ -102,6 +121,10 @@ public class PortfolioController {
         }
     }
 
+    /**
+     * Change the state of positions after a projection run.
+     * @param portfolio - The portfolio with the positions to be updated
+     */
     private void changeState(Portfolio portfolio)
     {
         for (Position position : portfolio.getPositions()) {
@@ -118,6 +141,15 @@ public class PortfolioController {
     }
 
     // Request path: /portfolio
+
+    /**
+     * This page shows the portfolios for the user who is logged in.
+     * @param model
+     * @param request
+     * @param response
+     * @param username - The username of the logged in user.
+     * @return
+     */
     @RequestMapping(value = "")
     public String index(Model model,
                         HttpServletRequest request, HttpServletResponse response,
@@ -135,6 +167,12 @@ public class PortfolioController {
         return "portfolio/index";
     }
 
+    /**
+     * This page shows the form to add a portfolio for the user who is logged in.
+     * @param model
+     * @param username - The username of the logged in user.
+     * @return
+     */
     @RequestMapping(value = "add", method = RequestMethod.GET)
     public String displayAddPortfolioForm(Model model, @CookieValue(value = "user", defaultValue = "none") String username) {
 
@@ -149,6 +187,14 @@ public class PortfolioController {
         return "portfolio/add";
     }
 
+    /**
+     * This page processes the form to add a portfolio for the user who is logged in.
+     * @param newPortfolio - An object containing the values of the new portfolio.
+     * @param errors
+     * @param model
+     * @param username - The username of the logged in user.
+     * @return
+     */
     @RequestMapping(value = "add", method = RequestMethod.POST)
     public String processAddPortfolioForm(@ModelAttribute @Valid Portfolio newPortfolio,
                                           Errors errors, Model model,
@@ -171,6 +217,12 @@ public class PortfolioController {
         return "redirect:";
     }
 
+    /**
+     * This page shows the form to remove portfolios for the user who is logged in.
+     * @param model
+     * @param username - The username of the logged in user.
+     * @return
+     */
     @RequestMapping(value = "remove", method = RequestMethod.GET)
     public String displayRemovePortfolioForm(Model model, @CookieValue(value = "user", defaultValue = "none") String username) {
 
@@ -184,6 +236,12 @@ public class PortfolioController {
         return "portfolio/remove";
     }
 
+    /**
+     * This page processes the form to remove portfolios for the user who is logged in.
+     * @param portfolioIds An array of the portfolio ids to be deleted.
+     * @param username - The username of the logged in user.
+     * @return
+     */
     @RequestMapping(value = "remove", method = RequestMethod.POST)
     public String processRemovePortfolioForm(@RequestParam int[] portfolioIds, @CookieValue(value = "user", defaultValue = "none") String username) {
 
@@ -214,6 +272,15 @@ public class PortfolioController {
         return "redirect:";
     }
 
+    /**
+     * This page displays the current run of the portfolio
+     * @param model
+     * @param portfolioId
+     * @param request
+     * @param response
+     * @param username
+     * @return
+     */
     @RequestMapping(value = "view/{portfolioId}", method = RequestMethod.GET)
     public String viewPortfolio(Model model, @PathVariable int portfolioId,
                                 HttpServletRequest request, HttpServletResponse response,
@@ -242,6 +309,15 @@ public class PortfolioController {
         return "portfolio/view";
     }
 
+    /**
+     * This page displays the previous run of the portfolio
+     * @param model
+     * @param portfolioId
+     * @param request
+     * @param response
+     * @param username
+     * @return
+     */
     @RequestMapping(value = "viewlast/{portfolioId}", method = RequestMethod.GET)
     public String viewLastPortfolio(Model model, @PathVariable int portfolioId,
                                 HttpServletRequest request, HttpServletResponse response,
@@ -434,5 +510,4 @@ public class PortfolioController {
         portfolioDao.save(p);
         return "redirect:view/" + p.getId();
     }
-
 }

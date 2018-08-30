@@ -33,6 +33,13 @@ public class SimStock {
 
     private Random rand;
 
+    /**
+     * The function takes a double and shits the decimal point a given number of places.
+     * @param num - The number to be shifted
+     * @param places - the number of places to shit the decimal point.  A positive value shits to the right,
+     *               A negative value shits to the left.
+     * @return - the number after the shift
+     */
     public static double decimalPlaces(double num, int places)
     {
         double multiplier = Math.pow(10.0, places);
@@ -136,6 +143,10 @@ public class SimStock {
         return nextDividendDate;
     }
 
+    /**
+     * return the nextDividenddate as a string.
+     * @return
+     */
     public String showDate()
     {
         String date = nextDividendDate.get(GregorianCalendar.MONTH)+1 + "/" +
@@ -145,18 +156,26 @@ public class SimStock {
         return date;
     }
 
+    /**
+     * Initialize the nextDividendDate field
+     * @param aLastDividendDate - The previous dividend date
+     */
     public void setNextDividendDate(GregorianCalendar aLastDividendDate)
     {
         GregorianCalendar today = (GregorianCalendar) GregorianCalendar.getInstance();
 
         this.nextDividendDate = aLastDividendDate;
 
+        // While the next dividend date is prior to the current day, add 3 months to it.
         while (StockDateField.compare(this.nextDividendDate, today) < 0)
         {
             this.nextDividendDate.add(GregorianCalendar.MONTH, 3);
         }
     }
 
+    /**
+     * Add 3 months to the nextDividendDate
+     */
     public void nextDividendDate()
     {
         this.nextDividendDate.add(GregorianCalendar.MONTH, 3);
@@ -187,6 +206,9 @@ public class SimStock {
         this.yield = decimalPlaces(this.yield, 2);
     }
 
+    /**
+     * Simulate a day of trading.
+     */
     public void trade()
     {
         double start = - (this.getVariance());
@@ -196,6 +218,10 @@ public class SimStock {
         setPrice(getPrice() + change);
     }
 
+    /**
+     * Readjust the trading variance every month
+     * @param days the number of days to average over.
+     */
     public void adjustMVariance(double days)
     {
         double change = getPrice() - getMonthStartPrice();
@@ -204,6 +230,10 @@ public class SimStock {
         setMonthStartPrice(getPrice());
     }
 
+    /**
+     * Readjust the trading variance every week.
+     * @param days the number of trading days to average over.
+     */
     public void adjustWVariance(double days)
     {
         double change = getPrice() - getWeekStartPrice();
@@ -218,6 +248,9 @@ public class SimStock {
         this.setWeekStartPrice(getPrice());
     }
 
+    /**
+     * Reset the SimStock to it's inital values
+     */
     protected void reset() {
 
         StockData stockData = StockData.getInstance();
