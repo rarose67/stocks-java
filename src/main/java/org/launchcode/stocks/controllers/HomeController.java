@@ -84,7 +84,7 @@ public class HomeController
     @RequestMapping(value = "", method = RequestMethod.GET)
     public String index()
     {
-        loadSimPositions(stockData);
+        //loadSimPositions(stockData);
         return "home";
     }
 }

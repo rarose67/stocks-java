@@ -91,7 +91,7 @@ public class UserController {
     @RequestMapping(value = "login")
     public String loginForm(Model model) {
 
-        if (simStockData.findAll().isEmpty()) {
+       /** if (simStockData.findAll().isEmpty()) {
             List<String> symbols = positionDao.findSymbols();
             Stock stock;
 
@@ -101,7 +101,7 @@ public class UserController {
                     simStockData.add(stock);
                 }
             }
-        }
+        } */
 
         model.addAttribute("title", "Login");
         model.addAttribute(new User());

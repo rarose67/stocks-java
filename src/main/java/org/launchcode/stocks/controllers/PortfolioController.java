@@ -290,7 +290,7 @@ public class PortfolioController {
             return "redirect:/user/login";
         }
 
-        loadSimPositions(stockData);
+        //loadSimPositions(stockData);
 
         Portfolio portfolio = portfolioDao.findOne(portfolioId);
 
@@ -327,7 +327,7 @@ public class PortfolioController {
             return "redirect:/user/login";
         }
 
-        loadSimPositions(stockData);
+        //loadSimPositions(stockData);
 
         Portfolio portfolio = portfolioDao.findOne(portfolioId);
 

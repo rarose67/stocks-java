@@ -104,11 +104,18 @@ public class StockDataImporter {
      *
      * @param stockData - the instance a the stockdata class
      */
-    public static void loadSymbols(StockData stockData)
+    public static void loadSymbols(StockData stockData, boolean reload)
     {
-        if (isLoaded)
+        if (isLoaded && !(reload))
         {
             return;
+        }
+
+        if (reload)
+        {
+            stockList.clear();
+            stockData.getSymbolsAndNames().clear();
+            stockData.getAllSymbolsAndNames().clear();
         }
 
         String address = "https://api.iextrading.com/1.0/ref-data/symbols";

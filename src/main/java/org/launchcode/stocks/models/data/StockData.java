@@ -49,8 +49,11 @@ public class StockData {
     }
 
     private StockData() {
-        StockDataImporter.loadSymbols(this);
+        StockDataImporter.loadSymbols(this, false);
+    }
 
+    public void reload() {
+        StockDataImporter.loadSymbols(this, true);
     }
 
     /**
