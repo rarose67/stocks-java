@@ -7,6 +7,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -37,9 +38,15 @@ public class StocksApplication implements CommandLineRunner {
 			@Override
 			public void run()
 			{
-				System.out.println("\n StockData reload Starting!");
-				startup.reloadData();
-				System.out.println("\n StockData reload Complete!");
+				GregorianCalendar  today = (GregorianCalendar) GregorianCalendar.getInstance();
+				int dow = today.get(GregorianCalendar.DAY_OF_WEEK);
+
+				if (!((dow == GregorianCalendar.SATURDAY) || (dow == GregorianCalendar.SUNDAY)))
+				{
+					System.out.println("\n StockData reload Starting!");
+					startup.reloadData();
+					System.out.println("\n StockData reload Complete!");
+				}
 			}
 		};
 
@@ -47,7 +54,7 @@ public class StocksApplication implements CommandLineRunner {
 		int day = date1.getDate();
 		int month = date1.getMonth();
 		int year = date1.getYear();
-		Date date2 = new Date(year, month, day, 23,59,59);
+		Date date2 = new Date(year, month, day, 23,59,0);
 		long period = (60 * 60 * 24) * 1000; // 1 day (in milliseconds)
 
 		//Reload the Stockdata once a day just before midnight.
