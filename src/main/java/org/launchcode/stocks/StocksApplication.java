@@ -32,6 +32,10 @@ public class StocksApplication implements CommandLineRunner {
 
 		startup.loadSimPositions();
 
+		/**
+		 * Timer function derived from code showed in youtube video:
+		 * Java - Making a timer(https://www.youtube.com/watch?v=36jbBSQd3eU)
+		 */
 		Timer timer = new Timer();
 		TimerTask reload = new TimerTask()
 		{
