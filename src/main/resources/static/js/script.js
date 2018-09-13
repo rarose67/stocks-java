@@ -32,6 +32,10 @@ function myFunction(current) {
             newElement.setAttribute("class", "active");
         }
 
+        /** This part of the function is derived from the question on
+         https://stackoverflow.com/questions/3495679/passing-parameters-in-javascript-onclick-event
+         answered by Jamie Wong
+        */
         var link = document.createElement('a');
            link.setAttribute('href', '#');
            link.innerHTML = j;
