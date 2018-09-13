@@ -5,6 +5,31 @@ function myFunction(current) {
     var pLength = pageList.childNodes.length;
     var maxPage = Math.ceil(max / perPage);
 
+    var pagestoShow = 5;
+    var firstinGroup = current - Math.floor(pagestoShow / 2);
+    var lastinGroup = current + Math.floor(pagestoShow / 2);
+    var pageGroups = Math.ceil(maxPage / pagestoShow);
+
+    //window.alert(firstinGroup + ", " + lastinGroup + ", " + pageGroups);
+
+    if(firstinGroup < 1)
+    {
+        firstinGroup = 1;
+        lastinGroup = pagestoShow;
+    }
+
+    if(lastinGroup > maxPage)
+    {
+        lastinGroup = maxPage;
+        firstinGroup = (lastinGroup - pagestoShow) + 1;
+    }
+
+    if(pageGroups == 1)
+    {
+        firstinGroup = 1;
+        lastinGroup = maxPage;
+    }
+
      getPage(current, perPage, true);
 
 
@@ -13,7 +38,7 @@ function myFunction(current) {
         pageList.removeChild(pageList.childNodes[i]);
     }
 
-    for(var j=1; j <= maxPage; j++)
+    for(var j=firstinGroup; j <= lastinGroup; j++)
     {
         var newElement = document.createElement('li');
         newElement.setAttribute("id", "page" + j);
