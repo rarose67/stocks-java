@@ -5,7 +5,9 @@ public enum StockCompareType {
     NONE ("None"),
     EQUAL ("="),
     LESS ("<"),
-    GREATER (">");
+    LESSEQ ("<="),
+    GREATER (">"),
+    GREATEREQ (">=");
 
 
     private final String name;

@@ -78,6 +78,10 @@ public class StockDecimalField extends StockField
                 return (stored < value);
             case GREATER:
                 return (stored > value);
+            case LESSEQ:
+                return (stored <= value);
+            case GREATEREQ:
+                return (stored >= value);
 
         }
 

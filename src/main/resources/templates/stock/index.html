@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org/">
 <head th:replace="fragments :: head"></head>
-<body>
+<body th:attr="onload='myFunction(1)'">
 
 <div th:replace="fragments :: page-header"></div>
 
@@ -11,13 +11,32 @@
 
     <p th:unless="${stocks} and ${stocks.size()}">No stocks</p>
 
-    <h2 th:text="${stocks.size()} + ' stocks'"></h2>
+    <h1 th:text="${stocks.size()} + ' stocks'"></h1>
     <ul>
-        <li th:each ="symbol : ${symbols}">
+        <li class="rep-row" th:each ="symbol : ${symbols}">
             <a th:href="@{'/stock/detail?symbol=' + ${symbol}}" th:text="${symbol}"></a>
             <span th:text="${' : ' + stocks.get(symbol)}"></span>
         </li>
     </ul>
+</div>
+<hr />
+<div>
+    <input id="max-items" type="hidden" th:value="${stocks.size()}" name="maxitems" />
+
+    <label for="per-page-select"># per Page: </label>
+    <select id="per-page-select"  name="perpageselect" th:attr="onchange='myFunction(1)'">
+        <option th:text="25"
+                th:selected="${perPage == 25}"
+                value="25"></option>
+        <option th:text="50"
+                th:selected="${perPage == 50}"
+                value="50"></option>
+        <option th:text="100"
+                th:selected="${perPage == 100}"
+                value="100"></option>
+    </select>
+    <br />
+    <ul id="page-list" class="pagination"></ul>
 </div>
 </body>
 <footer>

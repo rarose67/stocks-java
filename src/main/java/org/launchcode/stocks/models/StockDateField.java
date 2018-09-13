@@ -122,8 +122,12 @@ public class StockDateField extends StockField
                 return (result == 0);
             case LESS:
                 return (result < 0);
+            case LESSEQ:
+                return (result <= 0);
             case GREATER:
                 return (result > 0);
+            case GREATEREQ:
+                return (result >= 0);
 
         }
 
