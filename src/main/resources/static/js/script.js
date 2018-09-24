@@ -1,3 +1,6 @@
+/**
+This function dynamically adds the pagination links to a page.
+*/
 function myFunction(current) {
     var max = document.getElementById("max-items").value;
     var perPage = document.getElementById("per-page-select").value;
@@ -9,8 +12,6 @@ function myFunction(current) {
     var firstinGroup = current - Math.floor(pagestoShow / 2);
     var lastinGroup = current + Math.floor(pagestoShow / 2);
     var pageGroups = Math.ceil(maxPage / pagestoShow);
-
-    //window.alert(firstinGroup + ", " + lastinGroup + ", " + pageGroups);
 
     if(firstinGroup < 1)
     {
@@ -67,6 +68,12 @@ function myFunction(current) {
     }
 }
 
+/**
+This function displays the list of entries on a page.
+    page - int - The page to display.
+    perPage - int - The number of entries to display on each page.
+    loaded - bool - weather the function was called due to one of the pagination links.
+*/
 function getPage(page, perPage, loaded)
 {
     if (page < 1)
