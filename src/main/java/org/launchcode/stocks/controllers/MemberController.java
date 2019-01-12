@@ -52,8 +52,10 @@ public class MemberController {
             String pswd = member.getPassword();
             String pswdHash = Hash.hashPassword(pswd);
 
+            System.out.println(member.toString());
             member.setPassword(pswdHash);
             model.addAttribute("member", member);
+            System.out.println(member.toString());
             MemberDao.save(member);
             return "redirect:/member/login";
         } else {
