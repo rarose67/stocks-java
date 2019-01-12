@@ -23,7 +23,7 @@ import java.util.List;
  * Created by LaunchCode
  */
 @Controller
-@RequestMapping("user")
+@RequestMapping("member")
 public class MemberController {
 
     @Autowired
