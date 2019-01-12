@@ -8,7 +8,8 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.util.GregorianCalendar;
 
-@Entity(name = "position")
+@Entity
+@Table(name = "position")
 public class Position {
 
     @Id

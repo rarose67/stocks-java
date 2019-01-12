@@ -10,7 +10,8 @@ import java.util.List;
 /**
  * This class defines the portfolio object which contains information about a portfolio .
  */
-@Entity(name = "portfolio")
+@Entity
+@Table(name = "portfolio")
 public class Portfolio {
 
     @Id
