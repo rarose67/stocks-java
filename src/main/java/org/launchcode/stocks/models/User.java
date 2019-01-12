@@ -12,7 +12,7 @@ import java.util.List;
  * This class defines the user object which contains information about registered users.
  */
 @Entity
-@Table(name = "user", schema = "myapp")
+//@Table(name = "user", schema = "myapp")
 public class User {
 
     @Id
