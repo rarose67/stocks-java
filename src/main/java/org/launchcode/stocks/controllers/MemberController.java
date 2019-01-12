@@ -103,7 +103,7 @@ public class MemberController {
 
         model.addAttribute("title", "Login");
         model.addAttribute(new Member());
-        return "user/login";
+        return "member/login";
     }
 
     @RequestMapping(value = "login", method = RequestMethod.POST)
@@ -143,6 +143,6 @@ public class MemberController {
                 response.addCookie(c);
             }
         }
-        return "redirect:/user/login";
+        return "redirect:/member/login";
     }
 }
