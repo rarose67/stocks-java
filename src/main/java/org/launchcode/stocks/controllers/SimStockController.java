@@ -26,7 +26,7 @@ public class SimStockController {
     public String index(Model model, @CookieValue(value = "user", defaultValue = "none") String username) {
 
         if(username.equals("none")) {
-            return "redirect:/user/login";
+            return "redirect:/member/login";
         }
 
         String title ="My simulated Stocks";
@@ -54,7 +54,7 @@ public class SimStockController {
                                  @CookieValue(value = "user", defaultValue = "none") String username)
     {
         if(username.equals("none")) {
-            return "redirect:/user/login";
+            return "redirect:/member/login";
         }
 
         String title ="Simulated Stock";
@@ -71,7 +71,7 @@ public class SimStockController {
                          @CookieValue(value = "user", defaultValue = "none") String username) {
 
         if(username.equals("none")) {
-            return "redirect:/user/login";
+            return "redirect:/member/login";
         }
 
         String title ="Simulated Stock";
@@ -89,7 +89,7 @@ public class SimStockController {
     public String displaySearchForm(Model model, @CookieValue(value = "user", defaultValue = "none") String username) {
 
         if(username.equals("none")) {
-            return "redirect:/user/login";
+            return "redirect:/member/login";
         }
 
         StockCompareType[] types = StockCompareType.values();
@@ -106,7 +106,7 @@ public class SimStockController {
                                     @CookieValue(value = "user", defaultValue = "none") String username) {
 
         if(username.equals("none")) {
-            return "redirect:/user/login";
+            return "redirect:/member/login";
         }
 
         if (errors.hasErrors()) {

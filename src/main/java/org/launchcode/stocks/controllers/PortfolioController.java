@@ -156,7 +156,7 @@ public class PortfolioController {
                         @CookieValue(value = "user", defaultValue = "none") String username) {
 
         if(username.equals("none")) {
-            return "redirect:/user/login";
+            return "redirect:/member/login";
         }
         Member u = memberDao.findByUsername(username).get(0);
 
@@ -177,7 +177,7 @@ public class PortfolioController {
     public String displayAddPortfolioForm(Model model, @CookieValue(value = "user", defaultValue = "none") String username) {
 
         if(username.equals("none")) {
-            return "redirect:/user/login";
+            return "redirect:/member/login";
         }
 
         Member u = memberDao.findByUsername(username).get(0);
@@ -201,7 +201,7 @@ public class PortfolioController {
                                           @CookieValue(value = "user", defaultValue = "none") String username) {
 
         if(username.equals("none")) {
-            return "redirect:/user/login";
+            return "redirect:/member/login";
         }
         Member u = memberDao.findByUsername(username).get(0);
 
@@ -227,7 +227,7 @@ public class PortfolioController {
     public String displayRemovePortfolioForm(Model model, @CookieValue(value = "user", defaultValue = "none") String username) {
 
         if(username.equals("none")) {
-            return "redirect:/user/login";
+            return "redirect:/member/login";
         }
         Member u = memberDao.findByUsername(username).get(0);
 
@@ -246,7 +246,7 @@ public class PortfolioController {
     public String processRemovePortfolioForm(@RequestParam int[] portfolioIds, @CookieValue(value = "user", defaultValue = "none") String username) {
 
         if(username.equals("none")) {
-            return "redirect:/user/login";
+            return "redirect:/member/login";
         }
 
         for (int portfolioId : portfolioIds) {
@@ -287,7 +287,7 @@ public class PortfolioController {
                                 @CookieValue(value = "user", defaultValue = "none") String username) {
 
         if(username.equals("none")) {
-            return "redirect:/user/login";
+            return "redirect:/member/login";
         }
 
         //loadSimPositions(stockData);
@@ -324,7 +324,7 @@ public class PortfolioController {
                                 @CookieValue(value = "user", defaultValue = "none") String username) {
 
         if(username.equals("none")) {
-            return "redirect:/user/login";
+            return "redirect:/member/login";
         }
 
         //loadSimPositions(stockData);
@@ -351,7 +351,7 @@ public class PortfolioController {
                           @CookieValue(value = "user", defaultValue = "none") String username) {
 
         if(username.equals("none")) {
-            return "redirect:/user/login";
+            return "redirect:/member/login";
         }
 
         Portfolio portfolio = portfolioDao.findOne(portfolioId);
@@ -369,7 +369,7 @@ public class PortfolioController {
                                              @CookieValue(value = "portfolio", defaultValue = "none") String portfolioId) {
 
         if (username.equals("none")) {
-            return "redirect:/user/login";
+            return "redirect:/member/login";
         }
 
         if (portfolioId.equals("none")) {
@@ -389,7 +389,7 @@ public class PortfolioController {
                                         @CookieValue(value = "portfolio", defaultValue = "none") String portfolioId) {
 
         if (username.equals("none")) {
-            return "redirect:/user/login";
+            return "redirect:/member/login";
         }
 
         if (portfolioId.equals("none")) {
@@ -418,7 +418,7 @@ public class PortfolioController {
                                   @CookieValue(value = "user", defaultValue = "none") String username) {
 
         if(username.equals("none")) {
-            return "redirect:/user/login";
+            return "redirect:/member/login";
         }
 
         if(portfolioId.equals("-1")) {
@@ -447,7 +447,7 @@ public class PortfolioController {
                                           @CookieValue(value = "user", defaultValue = "none") String username) {
 
         if(username.equals("none")) {
-            return "redirect:/user/login";
+            return "redirect:/member/login";
         }
 
         if(portfolioId.equals("-1")) {
@@ -476,7 +476,7 @@ public class PortfolioController {
                                          @CookieValue(value = "user", defaultValue = "none") String username) {
 
         if(username.equals("none")) {
-            return "redirect:/user/login";
+            return "redirect:/member/login";
         }
 
         if(portfolioId.equals("-1")) {

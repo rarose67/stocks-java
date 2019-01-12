@@ -173,7 +173,7 @@ public class PositionController {
                                @CookieValue(value = "user", defaultValue = "none") String username) {
 
         if(username.equals("none")) {
-            return "redirect:/user/login";
+            return "redirect:/member/login";
         }
 
         loadSimPositions(stockData);
@@ -202,7 +202,7 @@ public class PositionController {
                                   @CookieValue(value = "user", defaultValue = "none") String username) {
 
         if(username.equals("none")) {
-            return "redirect:/user/login";
+            return "redirect:/member/login";
         }
 
         String title ="Edit a Position";
@@ -226,7 +226,7 @@ public class PositionController {
                                          @CookieValue(value = "user", defaultValue = "none") String username) {
 
         if(username.equals("none")) {
-            return "redirect:/user/login";
+            return "redirect:/member/login";
         }
 
         if(portfolioId.equals("-1")) {
@@ -270,7 +270,7 @@ public class PositionController {
                                         @CookieValue(value = "portfolio", defaultValue = "none") String portfolioId) {
 
         if (username.equals("none")) {
-            return "redirect:/user/login";
+            return "redirect:/member/login";
         }
 
         if (portfolioId.equals("none")) {
