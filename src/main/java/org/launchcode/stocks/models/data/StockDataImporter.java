@@ -319,9 +319,11 @@ public class StockDataImporter {
             }
         }
 
-        loadDividendInfo(symbols, symbolString);
-        weekStartPrice(symbols, symbolString);
-        loadStats(symbols, symbolString);
+        if(!(symbolString.equals(""))) {
+            loadDividendInfo(symbols, symbolString);
+            weekStartPrice(symbols, symbolString);
+            loadStats(symbols, symbolString);
+        }
     }
 
     /**
