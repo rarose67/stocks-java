@@ -24,7 +24,7 @@ public class PortfolioController {
     private PortfolioDao portfolioDao;
 
     @Autowired
-    private UserDao userDao;
+    private MemberDao memberDao;
 
     @Autowired
     private PositionDao positionDao;
@@ -158,7 +158,7 @@ public class PortfolioController {
         if(username.equals("none")) {
             return "redirect:/user/login";
         }
-        User u = userDao.findByUsername(username).get(0);
+        Member u = memberDao.findByUsername(username).get(0);
 
         clearPortfolioCookie(request, response);
         model.addAttribute("portfolios", u.getPortfolios());
@@ -180,7 +180,7 @@ public class PortfolioController {
             return "redirect:/user/login";
         }
 
-        User u = userDao.findByUsername(username).get(0);
+        Member u = memberDao.findByUsername(username).get(0);
 
         model.addAttribute("title", "Add portfolio");
         model.addAttribute(new Portfolio());
@@ -203,7 +203,7 @@ public class PortfolioController {
         if(username.equals("none")) {
             return "redirect:/user/login";
         }
-        User u = userDao.findByUsername(username).get(0);
+        Member u = memberDao.findByUsername(username).get(0);
 
         if (errors.hasErrors()) {
             model.addAttribute("title", "Add portfolio");
@@ -211,7 +211,7 @@ public class PortfolioController {
         }
 
         newPortfolio.setBalance(newPortfolio.getCash());
-        newPortfolio.setUser(u);
+        newPortfolio.setMember(u);
         portfolioDao.save(newPortfolio);
 
         return "redirect:";
@@ -229,7 +229,7 @@ public class PortfolioController {
         if(username.equals("none")) {
             return "redirect:/user/login";
         }
-        User u = userDao.findByUsername(username).get(0);
+        Member u = memberDao.findByUsername(username).get(0);
 
         model.addAttribute("portfolios", u.getPortfolios());
         model.addAttribute("title", "Remove portfolio");

@@ -3,16 +3,12 @@ package org.launchcode.stocks.controllers;
 import org.launchcode.stocks.models.*;
 import org.launchcode.stocks.models.data.*;
 import org.launchcode.stocks.models.forms.PositionForm;
-import org.launchcode.stocks.models.forms.SearchForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.util.List;
 
@@ -27,7 +23,7 @@ public class PositionController {
     private PositionDao positionDao;
 
     @Autowired
-    private UserDao userDao;
+    private MemberDao memberDao;
 
     private StockData stockData = StockData.getInstance();
 

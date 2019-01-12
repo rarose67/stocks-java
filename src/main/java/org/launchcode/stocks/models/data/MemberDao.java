@@ -1,6 +1,6 @@
 package org.launchcode.stocks.models.data;
 
-import org.launchcode.stocks.models.User;
+import org.launchcode.stocks.models.Member;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
@@ -9,8 +9,8 @@ import java.util.List;
 
 @Repository
 @Transactional
-public interface UserDao extends CrudRepository<User, Integer> {
+public interface MemberDao extends CrudRepository<Member, Integer> {
 
-    public List<User> findByUsername(String username);
+    public List<Member> findByUsername(String username);
 
 }

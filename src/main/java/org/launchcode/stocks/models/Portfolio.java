@@ -54,7 +54,7 @@ public class Portfolio {
     private int lastYears;
 
     @ManyToOne
-    private User user;
+    private Member member;
 
     /**
      * This function creates a portfolio object with default values.
@@ -152,8 +152,8 @@ public class Portfolio {
         this.positions = aPositions;
     }
 
-    public void setUser(User aUser) {
-        this.user = aUser;
+    public void setMember(Member aMember) {
+        this.member = aMember;
     }
 
     public void addItem(Position item) {

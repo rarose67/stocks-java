@@ -1,13 +1,11 @@
 package org.launchcode.stocks.controllers;
 
 import org.launchcode.stocks.models.Hash;
-import org.launchcode.stocks.models.Position;
-import org.launchcode.stocks.models.Stock;
-import org.launchcode.stocks.models.User;
+import org.launchcode.stocks.models.Member;
 import org.launchcode.stocks.models.data.PositionDao;
 import org.launchcode.stocks.models.data.SimStockData;
 import org.launchcode.stocks.models.data.StockData;
-import org.launchcode.stocks.models.data.UserDao;
+import org.launchcode.stocks.models.data.MemberDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -26,10 +24,10 @@ import java.util.List;
  */
 @Controller
 @RequestMapping("user")
-public class UserController {
+public class MemberController {
 
     @Autowired
-    private UserDao userdao;
+    private MemberDao MemberDao;
 
     @Autowired
     private PositionDao positionDao;
@@ -41,50 +39,50 @@ public class UserController {
     @RequestMapping(value = "add")
     public String add(Model model) {
 
-        model.addAttribute("title", "User Signup");
-        User user = new User();
-        model.addAttribute("user", user);
-        return "user/add";
+        model.addAttribute("title", "Member Signup");
+        Member member = new Member();
+        model.addAttribute("member", member);
+        return "member/add";
     }
 
     @RequestMapping(value = "add", method = RequestMethod.POST)
-    public String add(Model model, @ModelAttribute @Valid User user, Errors errors, String verify) {
-        List<User> sameName = userdao.findByUsername(user.getUsername());
-        if(!errors.hasErrors() && user.getPassword().equals(verify) && sameName.isEmpty()) {
-            String pswd = user.getPassword();
+    public String add(Model model, @ModelAttribute @Valid Member member, Errors errors, String verify) {
+        List<Member> sameName = MemberDao.findByUsername(member.getUsername());
+        if(!errors.hasErrors() && member.getPassword().equals(verify) && sameName.isEmpty()) {
+            String pswd = member.getPassword();
             String pswdHash = Hash.hashPassword(pswd);
 
-            user.setPassword(pswdHash);
-            model.addAttribute("user", user);
-            userdao.save(user);
-            return "redirect:/user/login";
+            member.setPassword(pswdHash);
+            model.addAttribute("member", member);
+            MemberDao.save(member);
+            return "redirect:/member/login";
         } else {
-            model.addAttribute("user", user);
-            model.addAttribute("title", "User Signup");
+            model.addAttribute("member", member);
+            model.addAttribute("title", "Member Signup");
 
-            if(user.getPassword().length() < 6) {
+            if(member.getPassword().length() < 6) {
                 model.addAttribute("message", "Password must be a least 6 characters long.");
             }
 
-            if((!user.getPassword().equals(verify)) && (user.getPassword().length() >= 6))  {
+            if((!member.getPassword().equals(verify)) && (member.getPassword().length() >= 6))  {
                 model.addAttribute("message", "Passwords must match");
-                user.setPassword("");
+                member.setPassword("");
             }
 
-            if((user.getEmail().equals("")) ||
-                    !(user.getEmail().matches("[\\w-]+@[\\w-]+\\.\\w+"))) {
+            if((member.getEmail().equals("")) ||
+                    !(member.getEmail().matches("[\\w-]+@[\\w-]+\\.\\w+"))) {
                 model.addAttribute("message", "Please enter a valid Email.");
             }
 
-            if((user.getUsername().equals("")) ||
-                    !(user.getUsername().matches("[a-zA-Z]{5}[a-zA-Z]*"))) {
+            if((member.getUsername().equals("")) ||
+                    !(member.getUsername().matches("[a-zA-Z]{5}[a-zA-Z]*"))) {
                 model.addAttribute("message", "The username must be at least 5 characters, & must be alphabetic");
             }
 
             if(!sameName.isEmpty()) {
                 model.addAttribute("message", "Username is taken, please select another one");
             }
-            return "user/add";
+            return "member/add";
         }
     }
 
@@ -104,30 +102,30 @@ public class UserController {
         } */
 
         model.addAttribute("title", "Login");
-        model.addAttribute(new User());
+        model.addAttribute(new Member());
         return "user/login";
     }
 
     @RequestMapping(value = "login", method = RequestMethod.POST)
-    public String add(Model model, @ModelAttribute User user, HttpServletResponse response) {
-        List<User> u = userdao.findByUsername(user.getUsername());
+    public String add(Model model, @ModelAttribute Member member, HttpServletResponse response) {
+        List<Member> u = MemberDao.findByUsername(member.getUsername());
         if(u.isEmpty()) {
             model.addAttribute("message", "Invalid Username");
             model.addAttribute("title", "Login");
-            return "user/login";
+            return "member/login";
         }
 
-        User loggedIn = u.get(0);
-        if(Hash.checkPassword(user.getPassword(), loggedIn.getPassword())) {
+        Member loggedIn = u.get(0);
+        if(Hash.checkPassword(member.getPassword(), loggedIn.getPassword())) {
 
-            Cookie c = new Cookie("user", user.getUsername());
+            Cookie c = new Cookie("member", member.getUsername());
             c.setPath("/");
             response.addCookie(c);
             return "redirect:/portfolio";
         } else {
             model.addAttribute("message", "Invalid Password");
             model.addAttribute("title", "Login");
-            return "user/login";
+            return "member/login";
         }
     }
 

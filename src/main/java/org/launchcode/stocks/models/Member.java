@@ -12,8 +12,7 @@ import java.util.List;
  * This class defines the user object which contains information about registered users.
  */
 @Entity
-@Table(name = "account")
-public class User {
+public class Member {
 
     @Id
     @GeneratedValue
@@ -36,7 +35,7 @@ public class User {
     @JoinColumn(name = "user_id")
     private List<Portfolio> portfolios;
 
-    public User() {
+    public Member() {
 
     }
 
