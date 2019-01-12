@@ -11,7 +11,7 @@ import java.util.List;
  * This class defines the portfolio object which contains information about a portfolio .
  */
 @Entity
-@Table(name = "portfolio")
+@Table(name = "portfolio", schema = "myapp")
 public class Portfolio {
 
     @Id

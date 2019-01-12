@@ -9,7 +9,7 @@ import javax.validation.constraints.NotNull;
 import java.util.GregorianCalendar;
 
 @Entity
-@Table(name = "position")
+@Table(name = "position", schema = "myapp")
 public class Position {
 
     @Id
