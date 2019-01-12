@@ -52,15 +52,15 @@ public class MemberController {
             String pswd = member.getPassword();
             String pswdHash = Hash.hashPassword(pswd);
 
-            System.out.println(member.toString());
+            //System.out.println(member.toString());
             member.setPassword(pswdHash);
             model.addAttribute("member", member);
-            System.out.println(member.toString());
+            //System.out.println(member.toString());
             MemberDao.save(member);
             return "redirect:/member/login";
         } else {
             model.addAttribute("member", member);
-            model.addAttribute("title", "Member Signup");
+            model.addAttribute("title", "User Signup");
 
             if(member.getPassword().length() < 6) {
                 model.addAttribute("message", "Password must be a least 6 characters long.");
