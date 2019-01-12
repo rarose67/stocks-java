@@ -11,7 +11,7 @@ import java.util.List;
 /**
  * This class defines the user object which contains information about registered users.
  */
-@Entity
+@Entity(name = "user")
 public class User {
 
     @Id
