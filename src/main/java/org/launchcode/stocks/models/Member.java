@@ -32,7 +32,7 @@ public class Member {
     private String password;
 
     @OneToMany
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "member_id")
     private List<Portfolio> portfolios;
 
     public Member() {
