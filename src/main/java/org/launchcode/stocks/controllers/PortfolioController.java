@@ -200,11 +200,13 @@ public class PortfolioController {
     public String processAddPortfolioForm(@ModelAttribute @Valid Portfolio newPortfolio,
                                           Errors errors, Model model,
                                           @CookieValue(value = "user", defaultValue = "none") String username) {
+        System.out.println("2. Logged in as: " + username + " !");
 
         if(username.equals("none")) {
             return "redirect:/member/login";
         }
         Member u = memberDao.findByUsername(username).get(0);
+        System.out.println("user is: " + u.toString() + " !");
 
         if (errors.hasErrors()) {
             model.addAttribute("title", "Add portfolio");
@@ -213,6 +215,7 @@ public class PortfolioController {
 
         newPortfolio.setBalance(newPortfolio.getCash());
         newPortfolio.setMember(u);
+        System.out.println("portfolio is: " + newPortfolio.toString() + " !");
         portfolioDao.save(newPortfolio);
 
         return "redirect:";
