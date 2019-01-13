@@ -206,7 +206,7 @@ public class PortfolioController {
             return "redirect:/member/login";
         }
         Member u = memberDao.findByUsername(username).get(0);
-        System.out.println("user is: " + u.toString() + " !");
+        System.out.println("user is: " + u.getEmail() + " !");
 
         if (errors.hasErrors()) {
             model.addAttribute("title", "Add portfolio");
@@ -215,7 +215,7 @@ public class PortfolioController {
 
         newPortfolio.setBalance(newPortfolio.getCash());
         newPortfolio.setMember(u);
-        System.out.println("portfolio is: " + newPortfolio.toString() + " !");
+        System.out.println("portfolio has: " + newPortfolio.getCash() + " !");
         portfolioDao.save(newPortfolio);
 
         return "redirect:";
