@@ -27,7 +27,7 @@ import java.util.List;
 public class MemberController {
 
     @Autowired
-    private MemberDao MemberDao;
+    private MemberDao memberDao;
 
     @Autowired
     private PositionDao positionDao;
@@ -47,7 +47,7 @@ public class MemberController {
 
     @RequestMapping(value = "add", method = RequestMethod.POST)
     public String add(Model model, @ModelAttribute @Valid Member member, Errors errors, String verify) {
-        List<Member> sameName = MemberDao.findByUsername(member.getUsername());
+        List<Member> sameName = memberDao.findByUsername(member.getUsername());
         if(!errors.hasErrors() && member.getPassword().equals(verify) && sameName.isEmpty()) {
             String pswd = member.getPassword();
             String pswdHash = Hash.hashPassword(pswd);
@@ -56,7 +56,7 @@ public class MemberController {
             member.setPassword(pswdHash);
             model.addAttribute("member", member);
             //System.out.println(member.toString());
-            MemberDao.save(member);
+            memberDao.save(member);
             return "redirect:/member/login";
         } else {
             model.addAttribute("member", member);
@@ -110,7 +110,7 @@ public class MemberController {
 
     @RequestMapping(value = "login", method = RequestMethod.POST)
     public String add(Model model, @ModelAttribute Member member, HttpServletResponse response) {
-        List<Member> u = MemberDao.findByUsername(member.getUsername());
+        List<Member> u = memberDao.findByUsername(member.getUsername());
         if(u.isEmpty()) {
             model.addAttribute("message", "Invalid Username");
             model.addAttribute("title", "Login");
