@@ -15,7 +15,7 @@
         <span th:errors="*{name}" class="error"></span>
     </div>
     <div class="form-group">
-        <label th:for="cash">Cash</label>
+        <label th:for="cash">Cash *</label>
         <input class="form-control" th:field="*{cash}" />
         <span th:errors="*{cash}" class="error"></span>
     </div>
@@ -23,6 +23,10 @@
     <input type="submit" value="Create Portfolio" />
 </form>
 </div>
-
+<footer>
+    <hr />
+    <div> * - The amount of money you have to reinvest in stocks.
+        This only affects projections, When you manually change the amount of shares you have, it's assumed you already have them.</div>
+</footer>
 </body>
 </html>
