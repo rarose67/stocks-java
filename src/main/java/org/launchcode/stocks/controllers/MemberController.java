@@ -120,7 +120,7 @@ public class MemberController {
         Member loggedIn = u.get(0);
         if(Hash.checkPassword(member.getPassword(), loggedIn.getPassword())) {
 
-            Cookie c = new Cookie("member", member.getUsername());
+            Cookie c = new Cookie("user", member.getUsername());
             c.setPath("/");
             response.addCookie(c);
             return "redirect:/portfolio";
