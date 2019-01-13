@@ -50,7 +50,7 @@
         </table>
     </div>
     <hr />
-    <form th:if="${member == true}" method="post" action="/simstock/add">
+    <form th:if="${user == true}" method="post" action="/simstock/add">
         <input id="symbol" type="hidden" name="symbol" th:value="${stock.getSymbol()}" />
         <input type="submit" value="Create SimStock" />
     </form>
