@@ -159,6 +159,7 @@ public class PortfolioController {
             return "redirect:/member/login";
         }
         Member u = memberDao.findByUsername(username).get(0);
+        System.out.println("Logged in as: " + username + " !");
 
         clearPortfolioCookie(request, response);
         model.addAttribute("portfolios", u.getPortfolios());
