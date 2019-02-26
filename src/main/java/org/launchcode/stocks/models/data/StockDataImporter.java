@@ -423,7 +423,7 @@ public class StockDataImporter {
             while (j < myArray.length() && !(found)) {
 
                 mySubObject = myArray.getJSONObject(j);
-                flag = mySubObject.getString("flag");
+                flag = mySubObject.optString("flag", "");
                 divDateString = mySubObject.getString("paymentDate");
 
                 if ((flag.equals("") || flag.equals("FI")) && !(divDateString.equals("")))
